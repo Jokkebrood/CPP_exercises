@@ -1,4 +1,4 @@
-#include "phonebook.hpp"
+#include "PhoneBook.hpp"
 
 void	info()
 {
@@ -14,31 +14,23 @@ void	info()
 	"╚════════════════════════════════════════════╝\n";
 }
 
-
-int	main()
-{
-	phonebook	phonebook;
-	int			index = 0;
+int	main() {
 	std::string	input;
+	PhoneBook	phonebook;
+
 	info();
-	while (std::getline(std::cin, input))
-	{
+	while (std::getline(std::cin, input)) {
 		std::transform(input.begin(), input.end(), input.begin(), ::toupper);
-		if (input.compare("EXIT") == 0)
-			break;
-		if (input.compare("ADD") == 0) {
-			add_contact(phonebook.contact[index]);
-			phonebook.contact[index].index = index + 1;
-			index = (index + 1) % MAX_CONTACT;
-		}
-		if (input.compare("SEARCH") == 0)
-		{
-			if (phonebook.contact[0].first_name.length() == 0)
-				std::cout << RED
-				<< "There are no contacts to search yet\n" << END_COLOR;
+		if (input == "ADD")
+			phonebook.addContact();
+		else if (input == "SEARCH") {
+			if (phonebook.checkIfContactEmpty(0))
+				std::cout << RED << "There are no contacts to search yet"
+					<< END_COLOR << std::endl;
 			else
-				search(phonebook.contact);
+				phonebook.searchContact();
 		}
+		else if (input == "EXIT")
+			exit (0);
 	}
-	return (0);
 }
