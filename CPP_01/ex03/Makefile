@@ -1,8 +1,10 @@
 NAME = Unnecessary_violence
 SRC =	main.cpp \
-		Weapon.hpp
+		Weapon.cpp \
+		HumanA.cpp \
+		HumanB.cpp
 OBJ_DIR = obj
-OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.cpp=.o))
+OBJ = $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 CC = c++
 CFLAGS = -Wall -Werror -Wextra -std=c++98 -g
 all : $(NAME)
@@ -10,9 +12,12 @@ all : $(NAME)
 $(NAME) : $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-$(OBJ_DIR)/%.o: %.cpp
-	@mkdir -p $(OBJ_DIR)
+
+$(OBJ_DIR)/%.o: %.cpp | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
 
 clean:
 	rm -rf $(OBJ_DIR)
