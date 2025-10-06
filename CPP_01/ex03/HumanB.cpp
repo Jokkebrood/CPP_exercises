@@ -28,5 +28,7 @@ void HumanB::attack()
 
 void HumanB::setWeapon(Weapon &weapon)
 {
+	if (_weapon != NULL)
+		delete _weapon;
 	_weapon = new Weapon(weapon);
 }
