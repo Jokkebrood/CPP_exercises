@@ -12,5 +12,4 @@ class Zombie
 		void announce(void);
 };
 
-Zombie* newZombie(std::string newName);
-void randomChump(std::string randomName);
+Zombie* zombieHorde(int n, std::string newName);
