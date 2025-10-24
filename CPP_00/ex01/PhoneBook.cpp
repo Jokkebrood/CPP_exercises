@@ -21,6 +21,8 @@ void	PhoneBook::addInfo(std::string &info, const std::string &message) {
 			<< message;
 		if (!std::getline(std::cin, info))
 			exit (1);
+		while (!info.empty() && isspace(info[0]))
+			info.erase(info.begin());
 	}
 	if (message == "Enter phone number: ") {
 		while (info.find_first_not_of("0123456789") != std::string::npos
