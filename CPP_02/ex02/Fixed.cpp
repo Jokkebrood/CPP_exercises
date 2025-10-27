@@ -2,37 +2,40 @@
 
 const int Fixed::_fractBits = 8;
 
-Fixed::Fixed() : _fixedPointVal(0)
-{
-	std::cout << "Default constructor called" << std::endl;
-}
+/******************************************************************************/
+/*                                CONSTRUCTORS                                */
+/******************************************************************************/
+
+
+Fixed::Fixed() : _fixedPointVal(0) {}
 
 Fixed::Fixed(const Fixed &copy)
 {
-	std::cout << "Copy constructor called" << std::endl;
 	*this = copy;
 }
 
 Fixed::Fixed(const int integer)
 {
-	std::cout << "Integer constructor called" << std::endl;
 	this->_fixedPointVal = integer << this->_fractBits;
 }
 
 Fixed::Fixed(const float floater)
 {
-	std::cout << "Floating point constructor called" << std::endl;
 	this->_fixedPointVal = roundf(floater * (1 << this->_fractBits));
 }
 
-Fixed::~Fixed()
-{
-	std::cout << "Destructor called" << std::endl;
-}
+/******************************************************************************/
+/*                               DESTRUCTOR                                   */
+/******************************************************************************/
+
+Fixed::~Fixed() {}
+
+/******************************************************************************/
+/*                              OPERATORS                                     */
+/******************************************************************************/
 
 Fixed& Fixed::operator=(const Fixed &src)
 {
-	std::cout << "Copy assignment operator called" << std::endl;
 	if (this != &src)
 		this->_fixedPointVal = src.getRawBits();
 	return *this;
@@ -44,17 +47,77 @@ std::ostream	&operator<<(std::ostream &o, Fixed const &fixed)
 	return (o);
 }
 
+/******************************* Comparison operators *************************/
+
+bool	Fixed::operator<(Fixed const &fixed)
+{
+	return (this->toFloat() < fixed.toFloat());
+}
+
+bool	Fixed::operator>(Fixed const &fixed)
+{
+	return (this->toFloat() > fixed.toFloat());
+}
+
+bool	Fixed::operator<=(Fixed const &fixed)
+{
+	return (this->toFloat() <= fixed.toFloat());
+}
+
+bool	Fixed::operator>=(Fixed const &fixed)
+{
+	return (this->toFloat() >= fixed.toFloat());
+}
+
+bool	Fixed::operator==(Fixed const &fixed)
+{
+	return (this->toFloat() == fixed.toFloat());
+}
+
+bool	Fixed::operator!=(Fixed const &fixed)
+{
+	return (this->toFloat() != fixed.toFloat());
+}
+
+/****************************** Arithmetic Operators **************************/
+
+float Fixed::operator+(Fixed &fixed)
+{
+	return (this->toFloat() + fixed.toFloat());
+}
+
+float Fixed::operator-(Fixed &fixed)
+{
+	return (this->toFloat() - fixed.toFloat());
+}
+
+float Fixed::operator*(Fixed &fixed)
+{
+	return (this->toFloat() * fixed.toFloat());
+}
+
+float Fixed::operator/(Fixed &fixed)
+{
+	return (this->toFloat() / fixed.toFloat());
+}
+
+/******************************************************************************/
+/*                              GETTERS/SETTERS                               */
+/******************************************************************************/
+
 int Fixed::getRawBits(void) const
 {
-	std::cout << "getRawBits member function called" << std::endl;
 	return this->_fixedPointVal;
 }
 
 void Fixed::setRawBits(int const raw)
 {
-	std::cout << "setRawBits member function called" << std::endl;
 	this->_fixedPointVal = raw;
 }
+
+/******************************************************************************/
+/*                                TRANSFORMERS                                */
+/******************************************************************************/
 
 int Fixed::toInt(void) const
 {
