@@ -34,7 +34,7 @@ void Harl::complain(std::string level)
 		"warning",
 		"error"
 	};
-	void (Harl::*ptr[NR_LVLS])() = 
+	void (Harl::*ptr[NR_LVLS])() =
 	{
 		&Harl::debug,
 		&Harl::info,

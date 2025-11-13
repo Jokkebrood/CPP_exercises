@@ -1,4 +1,4 @@
-NAME = Unnecessary_violence
+NAME = FixedPointNumber
 SRC =	main.cpp \
 		Fixed.cpp
 OBJ_DIR = obj

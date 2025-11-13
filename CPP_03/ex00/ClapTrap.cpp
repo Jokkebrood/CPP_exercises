@@ -1,16 +1,38 @@
 #include "ClapTrap.hpp"
 
-ClapTrap::ClapTrap(std::string name) : _name(name)
+ClapTrap::ClapTrap()
+	: _name("John Doe"),
+	_hitPoints(10),
+	_energyPoints(10),
+	_attackDamage(0)
+{
+	std::cout << "Hello, I'm a default constructor and have been called"<< std::endl;
+}
+
+ClapTrap::ClapTrap(std::string name)
+	: _name(name),
+	_hitPoints(10),
+	_energyPoints(10),
+	_attackDamage(0)
 {
 	std::cout << "Hello, I'm a constructor and have been called"<< std::endl;
-	_hitPoints = 10;
-	_energyPoints = 10;
-	_attackDamage = 0;
 }
 
 ClapTrap::~ClapTrap()
 {
 	std::cout << "I AM A DESTRUCTOR, DESTROYER OF DATA!!!" << std::endl;
+}
+
+ClapTrap ClapTrap::operator=(ClapTrap &src)
+{
+	if (this != &src)
+	{
+		this->_name = src._name;
+		this->_hitPoints = src._hitPoints;
+		this->_energyPoints = src._energyPoints;
+		this->_attackDamage = src._attackDamage;
+	}
+	return *this;
 }
 
 void ClapTrap::attack(const std::string& target)

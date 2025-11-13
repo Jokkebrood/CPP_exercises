@@ -2,13 +2,13 @@
 
 int main()
 {
-	std::string randomName = "random zombie";
-	std::string newName = "new zombie";
-	Zombie *zombie;
+	std::string newZombie = "Mr. Newman";
+	std::string randomZombie = "Mr. Wacky";
 	
-	randomChump(randomName);
-	zombie = newZombie(newName);
-	zombie->announce();
-	delete zombie;
+	Zombie zombie;
+	Zombie *newZomb = zombie.newZombie(newZombie);
+	newZomb->announce();
+	zombie.randomChump(randomZombie);
+	delete newZomb;
 	return 0;
 }

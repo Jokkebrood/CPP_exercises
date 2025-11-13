@@ -2,22 +2,6 @@
 
 int main( void )
 {
-	/*
-	   Fixed a;
-	   Fixed const b( 10 );
-	   Fixed const c( 42.42f );
-	   Fixed const d( b );
-	   a = Fixed( 1234.4321f );
-	   std::cout << "a is " << a << std::endl;
-	   std::cout << "b is " << b << std::endl;
-	   std::cout << "c is " << c << std::endl;
-	   std::cout << "d is " << d << std::endl;
-	   std::cout << "a is " << a.toInt() << " as integer" << std::endl;
-	   std::cout << "b is " << b.toInt() << " as integer" << std::endl;
-	   std::cout << "c is " << c.toInt() << " as integer" << std::endl;
-	   std::cout << "d is " << d.toInt() << " as integer" << std::endl;
-	 */
-
 	std::cout << std::endl;
 	Fixed a(5.5f);
 	Fixed b(2.0f);
@@ -61,5 +45,26 @@ int main( void )
 	std::cout << "a <= c : " << (a <= c) << std::endl;
 	std::cout << "a >= c : " << (a >= c) << std::endl;
 	std::cout << std::endl;
+
+	std::cout << "Incremental operators test: i++, ++i, --i and i--" << std::endl;
+	std::cout << std::endl;
+	std::cout << "b++ : " << b++ << std::endl;
+	std::cout << "++b : " << ++b << std::endl;
+	std::cout << "b++ : " << b++ << std::endl;
+
+	std::cout << "b-- : " << b-- << std::endl;
+	std::cout << "--b : " << --b << std::endl;
+	std::cout << "b-- : " << b-- << std::endl;
+	std::cout << std::endl;
+
+	std::cout << "Tester for min max" << std::endl;
+	std::cout << std::endl;
+	Fixed comp;
+	const Fixed d(5);
+	const Fixed e(10);
+	std::cout << "a & b in min: " << comp.min(a, b) << std::endl;
+	std::cout << "a & b in max: " << comp.max(a, b) << std::endl;
+	std::cout << "const a & b in min: " << comp.min(d, e) << std::endl;
+	std::cout << "const a & b in max: " << comp.max(d, e) << std::endl;
 	return 0;
 }

@@ -101,6 +101,64 @@ float Fixed::operator/(Fixed &fixed)
 	return (this->toFloat() / fixed.toFloat());
 }
 
+/******************************* Increment Operators **************************/
+
+Fixed& Fixed::operator--()
+{
+	--_fixedPointVal;
+	return *this;
+}
+
+Fixed Fixed::operator--(int)
+{
+	Fixed temp = *this;
+	--_fixedPointVal;
+	return temp;
+}
+
+Fixed& Fixed::operator++()
+{
+	++_fixedPointVal;
+	return *this;
+}
+
+Fixed Fixed::operator++(int)
+{
+	Fixed temp = this;
+	++_fixedPointVal;
+	return temp;
+}
+
+/********************************* Min/Max ************************************/
+
+Fixed& Fixed::max(Fixed &num1, Fixed &num2)
+{
+	if (num1._fixedPointVal > num2._fixedPointVal)
+		return (num1);
+	return (num2);
+}
+
+Fixed& Fixed::min(Fixed &num1, Fixed &num2)
+{
+	if (num1._fixedPointVal < num2._fixedPointVal)
+		return (num1);
+	return (num2);
+}
+
+const Fixed& Fixed::max(const Fixed &num1, const Fixed &num2)
+{
+	if (num1._fixedPointVal > num2._fixedPointVal)
+		return (num1);
+	return (num2);
+}
+
+const Fixed& Fixed::min(const Fixed &num1, const Fixed &num2)
+{
+	if (num1._fixedPointVal < num2._fixedPointVal)
+		return (num1);
+	return (num2);
+}
+
 /******************************************************************************/
 /*                              GETTERS/SETTERS                               */
 /******************************************************************************/

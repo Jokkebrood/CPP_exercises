@@ -11,20 +11,26 @@ class Fixed
 	public:
 		// A default constructor that initializes the fixed-point number value to 0
 		Fixed();
+
 		// A copy constructor
 		Fixed(const Fixed &copy);
+
 		// Value constructor
 		Fixed(const int integer);
 		Fixed(const float floater);
+
 		// A destructor
 		~Fixed();
+
 		// A copy assignment operator overload
 		Fixed &operator=(const Fixed &other);
+
 		// Arithmic assignment operator overload
 		float operator+(Fixed &fixed);
 		float operator-(Fixed &fixed);
 		float operator/(Fixed &fixed);
 		float operator*(Fixed &fixed);
+
 		// comparison operator
 		bool operator<(Fixed const &fixed);
 		bool operator>(Fixed const &fixed);
@@ -32,9 +38,23 @@ class Fixed
 		bool operator>=(Fixed const &fixed);
 		bool operator==(Fixed const &fixed);
 		bool operator!=(Fixed const &fixed);
+
+		// incrementors
+		float operator++(int);
+		float operator++();
+		float operator--(int);
+		float operator--();
+
+		// Min/Max
+		static Fixed& min(Fixed &num1, Fixed &num2);
+		static Fixed& max(Fixed &num1, Fixed &num2);
+		static const Fixed& max(const Fixed &num1, const Fixed &num2);
+		static const Fixed& min(const Fixed &num1, const Fixed &num2);
+
 		// getter/setter
 		int getRawBits(void) const;
 		void setRawBits(int const raw);
+
 		// transformer
 		int toInt(void) const;
 		float toFloat(void) const;

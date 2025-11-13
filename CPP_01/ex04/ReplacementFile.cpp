@@ -19,7 +19,7 @@ void ReplacementFile::copyIntoNewFile(std::string toReplace, std::string replace
 		std::string replacedLine;
 		size_t startCopy = 0;
 		size_t pos;
-		
+
 		while ((pos = line.find(toReplace, startCopy)) != std::string::npos)
 		{
 			replacedLine += line.substr(startCopy, pos - startCopy);
