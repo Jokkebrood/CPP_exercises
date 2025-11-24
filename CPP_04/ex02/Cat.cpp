@@ -8,6 +8,7 @@ Cat::Cat() : Animal("Cat")
 
 Cat::Cat(const Cat &src)
 {
+	std::cout << "Cat: copy constructor" << std::endl;
 	_brain = new Brain(*src._brain);
 }
 

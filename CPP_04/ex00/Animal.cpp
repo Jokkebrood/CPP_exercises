@@ -1,12 +1,24 @@
 #include "Animal.hpp"
 
-Animal::Animal(void) : _type("Animal") {}
+Animal::Animal(void) : _type("Animal")
+{
+	std::cout << "Animal default constructor" << std::endl;
+}
 
-Animal::Animal(const Animal &src) : _type(src._type) {}
+Animal::Animal(const Animal &src) : _type(src._type)
+{
+	std::cout << "Animal copy constructor" << std::endl;
+}
 
-Animal::Animal(const std::string &type) : _type(type) {}
+Animal::Animal(const std::string &type) : _type(type)
+{
+	std::cout << "Animal string constructor" << std::endl;
+}
 
-Animal::~Animal() {}
+Animal::~Animal()
+{
+	std::cout << "Animal destructor" << std::endl;
+}
 
 Animal& Animal::operator=(const Animal &src)
 {

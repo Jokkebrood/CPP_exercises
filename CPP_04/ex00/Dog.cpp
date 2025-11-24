@@ -1,9 +1,13 @@
 #include "Dog.hpp"
 
-Dog::Dog() : Animal("Dog") {}
+Dog::Dog() : Animal("Dog")
+{
+	std::cout << "Dog default constructor" << std::endl;
+}
 
 Dog::Dog(const Dog &src)
 {
+	std::cout << "Dog copy constructor" << std::endl;
 	_type = src._type;
 }
 
@@ -14,7 +18,10 @@ Dog& Dog::operator=(const Dog &src)
 	return *this;
 }
 
-Dog::~Dog() {}
+Dog::~Dog()
+{
+	std::cout << "Dog destructor" << std::endl;
+}
 
 void Dog::makeSound() const
 {

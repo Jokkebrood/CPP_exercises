@@ -1,9 +1,13 @@
 #include "Cat.hpp"
 
-Cat::Cat() : Animal("Cat") {}
+Cat::Cat() : Animal("Cat")
+{
+	std::cout << "Cat default constructor" << std::endl;
+}
 
 Cat::Cat(const Cat &src)
 {
+	std::cout << "Cat copy constructor" << std::endl;
 	_type = src._type;
 }
 
@@ -14,7 +18,10 @@ Cat& Cat::operator=(const Cat &src)
 	return *this;
 }
 
-Cat::~Cat() {}
+Cat::~Cat()
+{
+	std::cout << "Cat destructor" << std::endl;
+}
 
 void Cat::makeSound() const
 {
