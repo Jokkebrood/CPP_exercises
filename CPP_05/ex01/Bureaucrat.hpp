@@ -1,5 +1,3 @@
-#pragma once
-
 #include <string>
 #include <iostream>
 #include <stdexcept>
@@ -18,8 +16,6 @@ class Bureaucrat
 
 		int getGrade() const;
 		std::string getName() const;
-
-		void signForm(Form form);
 
 		class GradeTooLowException : public std::exception
 		{
