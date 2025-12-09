@@ -3,7 +3,7 @@
 #include <string>
 #include <cctype>
 #include "Bureaucrat.hpp"
-#include "Form.hpp"
+#include "AForm.hpp"
 
 int getNumberInput() {
     std::string grade;
@@ -54,18 +54,18 @@ int main()
 		int exec = getNumberInput();
 		try
 		{
-			Form form(formName, sign, exec);
+			AForm form(formName, sign, exec);
 			std::cout << form;
 			std::cout << std::endl;
 			std::cout << "RESULT OF YOUR BUREAUCRAT TRYING TO SIGN YOUR FORM" << std::endl;
 			std::cout << std::endl;
-			bur.signForm(form);	
+			bur.signAForm(form);	
 		}
-		catch (Form::GradeTooHighException &e)
+		catch (AForm::GradeTooHighException &e)
 		{
 			std::cout << e.what() << std::endl;
 		}
-		catch (Form::GradeTooLowException &e)
+		catch (AForm::GradeTooLowException &e)
 		{
 			std::cout << e.what() << std::endl;
 		}

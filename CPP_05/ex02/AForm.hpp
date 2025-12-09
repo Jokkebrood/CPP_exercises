@@ -2,15 +2,15 @@
 
 #include "Bureaucrat.hpp"
 
-class Form
+class AForm
 {
 	public:
-		Form();
-		Form(Form &src);
-		Form(std::string name, int signGrade, int execGrade);
-		~Form();
+		AForm();
+		AForm(AForm &src);
+		AForm(std::string name, int signGrade, int execGrade);
+		~AForm();
 
-		Form operator=(Form &src);
+		AForm operator=(AForm &src);
 
 		std::string getName() const;
 		bool getSignature() const;
@@ -39,7 +39,7 @@ class Form
 		class BothTooLow : public std::exception
 		{
 			public:
-				BothTooLow(Bureaucrat &bur, Form &form);
+				BothTooLow(Bureaucrat &bur, AForm &form);
 				virtual ~BothTooLow() throw() {}
 				virtual const char *what() const throw();
 			private:
@@ -49,7 +49,7 @@ class Form
 		class SignTooLow : public std::exception
 		{
 			public:
-				SignTooLow(Bureaucrat &bur, Form &form);
+				SignTooLow(Bureaucrat &bur, AForm &form);
 				virtual ~SignTooLow() throw() {}
 				virtual const char *what() const throw();
 			private:
@@ -59,7 +59,7 @@ class Form
 		class ExecTooLow : public std::exception
 		{
 			public:
-				ExecTooLow(Bureaucrat &bur, Form &form);
+				ExecTooLow(Bureaucrat &bur, AForm &form);
 				virtual ~ExecTooLow() throw() {}
 				virtual const char *what() const throw();
 			private:
@@ -73,4 +73,4 @@ class Form
 		const int _execGrade;
 };
 
-std::ostream &operator<<(std::ostream & os, Form const &other);
+std::ostream &operator<<(std::ostream & os, AForm const &other);
