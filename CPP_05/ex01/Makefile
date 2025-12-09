@@ -1,6 +1,7 @@
-NAME = Form_up,_maggots!
+NAME = Mommy,_when_I_grow_up,_I_want_to_be_a_bureaucrat!
 SRC =	main.cpp \
-	Bureaucrat.cpp
+		Bureaucrat.cpp \
+		Form.cpp
 OBJ_DIR = obj
 OBJ = $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 CC = c++

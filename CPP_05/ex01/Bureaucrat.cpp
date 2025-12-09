@@ -1,4 +1,5 @@
 #include "Bureaucrat.hpp"
+#include "Form.hpp"
 
 /************************* CONSTRUCTORS & DESTRUCTORS ******************************/
 
@@ -60,3 +61,23 @@ int Bureaucrat::getGrade() const { return _grade; }
 std::string Bureaucrat::getName() const { return _name; }
 
 /*********************************** OTHER *************************************/
+
+void Bureaucrat::signForm(Form &form)
+{
+	try
+	{
+		form.beSigned(*this);
+	}
+	catch(Form::BothTooLow &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	catch(Form::SignTooLow &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	catch(Form::ExecTooLow &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+}
