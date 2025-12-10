@@ -4,79 +4,23 @@
 #include <cctype>
 #include "Bureaucrat.hpp"
 #include "AForm.hpp"
-
-int getNumberInput() {
-    std::string grade;
-    while (true) {
-        if (!std::getline(std::cin, grade)) { // EOF or error
-            std::cout << std::endl << "Input ended unexpectedly." << std::endl;
-            return -1; // or some sentinel value indicating EOF
-        }
-
-        bool allDigits = true;
-        for (std::string::size_type i = 0; i < grade.size(); ++i) {
-            if (!std::isdigit(grade[i])) {
-                allDigits = false;
-                break;
-            }
-        }
-
-        if (allDigits && !grade.empty()) {
-            int value;
-            std::istringstream iss(grade);
-            iss >> value;
-            return value;
-        } else {
-            std::cout << "Invalid input. Please enter numbers only: ";
-        }
-    }
-}
+#include "ShrubberyCreationForm.hpp"
 
 int main()
 {
-	std::string burName;
-
-	std::string formName;
-
-	std::cout << "Choose name for your bureaucrat: ";
-	std::getline(std::cin, burName);
-	std::cout << "Choose grade for bureaucrat: ";
-	int grade = getNumberInput();
+	ShrubberyCreationForm shrub("bush");
+	Bureaucrat boss("Boss", 1);
+	Bureaucrat employee("Employee", 150);
 	try
 	{
-		Bureaucrat bur(burName, grade);
-		std::cout << bur << std::endl;
-		std::cout << "Choose name for your form: ";
-		std::getline(std::cin, formName);
-		std::cout << "Choose sign grade for form: ";
-		int sign = getNumberInput();
-		std::cout << "Choose execution grade for form: ";
-		int exec = getNumberInput();
-		try
-		{
-			AForm form(formName, sign, exec);
-			std::cout << form;
-			std::cout << std::endl;
-			std::cout << "RESULT OF YOUR BUREAUCRAT TRYING TO SIGN YOUR FORM" << std::endl;
-			std::cout << std::endl;
-			bur.signAForm(form);	
-		}
-		catch (AForm::GradeTooHighException &e)
-		{
-			std::cout << e.what() << std::endl;
-		}
-		catch (AForm::GradeTooLowException &e)
-		{
-			std::cout << e.what() << std::endl;
-		}
+		employee.signAForm(shrub);
+		std::cout << shrub;
+		shrub.targetFunction(boss);
+		shrub.targetFunction(employee);
 	}
-	catch (Bureaucrat::GradeTooHighException &e)
+	catch(Bureaucrat::GradeTooLowException &e)
 	{
-		std::cout << e.what() << std::endl;
-	}
-	catch (Bureaucrat::GradeTooLowException &e)
-	{
-		std::cout << e.what() << std::endl;
+		std::cout << "oh no" << std::endl;
 	}
 	return 0;
 }

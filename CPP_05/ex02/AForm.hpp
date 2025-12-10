@@ -16,7 +16,7 @@ class AForm
 		bool getSignature() const;
 		int getSignGrade() const;
 		int getExecGrade() const;
-		void beSigned(Bureaucrat &bur);
+		virtual void beSigned(Bureaucrat &bur) = 0;
 
 		class GradeTooLowException : public std::exception
 		{
@@ -65,7 +65,6 @@ class AForm
 			private:
 				std::string _message;
 		};
-
 	private:
 		const std::string _name;
 		bool _signature;
