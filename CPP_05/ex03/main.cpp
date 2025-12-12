@@ -90,23 +90,21 @@ int main()
 
 int main()
 {
-//	Bureaucrat boss("boss", 1);
+	Bureaucrat boss("boss", 1);
 	Intern intern;
 
-	AForm *formA = intern.makeForm("shrubbery creation", "gardenA");
-	AForm *formB = new ShrubberyCreationForm("gardenB");
+	AForm *formA = intern.makeForm("shrubbery creation", "garden");
 	std::cout << *formA;
-	std::cout << *formB;
+	formA->execute(boss);
 	try
 	{
-		AForm *formC = intern.makeForm("bad input", "gardenC");
-		std::cout << *formC;
-		delete formC;
+		AForm *formB = intern.makeForm("bad input", "poop");
+		std::cout << *formB;
+		delete formB;
 	}
 	catch (const std::runtime_error &e)
 	{
 		std::cout << e.what() << std::endl;
 	}
 	delete formA;
-	delete formB;
 }
