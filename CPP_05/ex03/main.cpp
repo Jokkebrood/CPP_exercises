@@ -2,6 +2,7 @@
 #include <sstream>
 #include <string>
 #include <cctype>
+#include "Intern.hpp"
 #include "Bureaucrat.hpp"
 #include "AForm.hpp"
 #include "ShrubberyCreationForm.hpp"
@@ -60,6 +61,7 @@ int main()
 }
 */
 
+/*
 int main()
 {
 	PresidentialPardonForm pardon("A person");
@@ -83,4 +85,28 @@ int main()
 	pardon.execute(boss);
 	boss.executeForm(pardon);
 	return 0;
+}
+*/
+
+int main()
+{
+//	Bureaucrat boss("boss", 1);
+	Intern intern;
+
+	AForm *formA = intern.makeForm("shrubbery creation", "gardenA");
+	AForm *formB = new ShrubberyCreationForm("gardenB");
+	std::cout << *formA;
+	std::cout << *formB;
+	try
+	{
+		AForm *formC = intern.makeForm("bad input", "gardenC");
+		std::cout << *formC;
+		delete formC;
+	}
+	catch (const std::runtime_error &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	delete formA;
+	delete formB;
 }

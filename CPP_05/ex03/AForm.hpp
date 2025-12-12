@@ -8,7 +8,7 @@ class AForm
 		AForm();
 		AForm(AForm &src);
 		AForm(std::string name, int signGrade, int execGrade);
-		~AForm();
+		virtual ~AForm();
 
 		AForm& operator=(AForm &src);
 

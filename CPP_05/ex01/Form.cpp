@@ -51,17 +51,17 @@ int Form::getExecGrade() const { return _execGrade; }
 
 /*********************************** OTHER *************************************/
 
-Form::SignTooLow::SignTooLow(Bureaucrat &bur, Form &form)
+AForm::SignTooLow::SignTooLow(Bureaucrat &bur, AForm &form)
 	: _message(bur.getName() + " couldn't sign " + form.getName()
-	+ " because their sign grade is too low" + "\n") {}
+	+ " because their grade is too low to sign\n") {}
 
-Form::ExecTooLow::ExecTooLow(Bureaucrat &bur, Form &form)
+AForm::ExecTooLow::ExecTooLow(Bureaucrat &bur, AForm &form)
 	: _message(bur.getName() + " couldn't sign " + form.getName()
-	+ " because their execution grade is too low" + "\n") {}
+	+ " because their grade is too low to execute\n") {}
 
-Form::BothTooLow::BothTooLow(Bureaucrat &bur, Form &form)
+AForm::BothTooLow::BothTooLow(Bureaucrat &bur, AForm &form)
 	: _message(bur.getName() + " couldn't sign " + form.getName()
-	+ " because their execution and sign grade are too low" + "\n") {}
+	+ " because their grade is too low to execute or sign \n") {}
 
 const char *Form::BothTooLow::what() const throw()
 {
