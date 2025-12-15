@@ -1,11 +1,19 @@
 #pragma once
 
-#include <strings>
+#include <string>
+#include <cctype>
+#include <cstdlib>
 #include <iostream>
+
+#define INT 0
+#define CHAR 1
+#define FLOAT 2
+#define DOUBLE 3
+#define TYPES 4
 
 class ScalerConverter
 {
-	private:
+	public:
 		// constructors
 		ScalerConverter();
 		ScalerConverter(ScalerConverter &src);
@@ -15,11 +23,23 @@ class ScalerConverter
 		~ScalerConverter();
 	
 		// operator overload functions
-		ScalerConverter operator=(ScalerConverter &src);
+//		ScalerConverter operator=(ScalerConverter &src);
+
+	private:
+		// Functions
+		void converter();
+		void checkType();
+		void convertChar();
+		void convertInt();
+		void convertDouble();
+		void convertFloat();
+		void conversionPrinter();
 
 		// objects
+		std::string _input;
 		int _int;
-		char _char;
-		float _float;
 		double _double;
-}
+		float _float;
+		char _char;
+		int	type;
+};
