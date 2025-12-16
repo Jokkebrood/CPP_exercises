@@ -9,23 +9,27 @@
 #define CHAR 1
 #define FLOAT 2
 #define DOUBLE 3
-#define TYPES 4
+#define DOUBLE_NAN 4
+#define FLOAT_NAN 5
+#define TYPES 6
 
 class ScalerConverter
 {
 	public:
 		// constructors
-		ScalerConverter();
-		ScalerConverter(ScalerConverter &src);
 		ScalerConverter(std::string input);
 
 		//destructor
 		~ScalerConverter();
-	
-		// operator overload functions
-//		ScalerConverter operator=(ScalerConverter &src);
 
 	private:
+		// constructors
+		ScalerConverter();
+		ScalerConverter(ScalerConverter &src);
+
+		// operator overload functions
+		ScalerConverter& operator=(ScalerConverter &src);
+
 		// Functions
 		void converter();
 		void checkType();
@@ -33,13 +37,14 @@ class ScalerConverter
 		void convertInt();
 		void convertDouble();
 		void convertFloat();
+
 		void conversionPrinter();
 
 		// objects
 		std::string _input;
 		int _int;
-		double _double;
-		float _float;
 		char _char;
-		int	type;
+		float _float;
+		double _double;
+		int type;
 };

@@ -9,18 +9,38 @@ ScalerConverter::ScalerConverter(ScalerConverter &src)
 
 ScalerConverter::ScalerConverter(std::string input) : _input(input)
 {
-	checkType();
 	converter();
-	conversionPrinter();
 }
 
 ScalerConverter::~ScalerConverter() {}
+
+ScalerConverter& ScalerConverter::operator=(ScalerConverter &src)
+{
+	if (this != &src)
+		*this = src;
+	return *this;
+}
 
 void ScalerConverter::checkType()
 {
 	int dot = 0;
 
 	type = INT;
+
+	// check for -inf, nanf, etc. exceptions
+	if (_input.compare("nan") == 0 || _input.compare("-inf") == 0
+		|| _input.compare("+inf") == 0)
+	{
+		type = DOUBLE_NAN;
+		return ;
+	}
+	if (_input.compare("nanf") == 0 || _input.compare("-inff") == 0 ||
+		_input.compare("+inff") == 0)
+	{
+		type = FLOAT_NAN;
+		return ;
+	}
+	// check for type
 	if (_input.length() == 1 && !isdigit(_input[0]))
 	{
 		type = CHAR;
@@ -38,8 +58,10 @@ void ScalerConverter::checkType()
 				dot++;
 				type = DOUBLE;
 			}
-			if (!_input[i + 1] && _input[i] == 'f')
+			else if (!_input[i + 1] && _input[i] == 'f')
 				type = FLOAT;
+			else 
+				throw std::runtime_error("ERROR: invalid input");
 		}
 	}
 	if (dot > 1)
@@ -86,19 +108,26 @@ void ScalerConverter::conversionPrinter()
 		std::cout << "char: no char with this value" << std::endl;
 	else
 		std::cout << "char: " << _char << std::endl;
-	std::cout << "int: " << _int << std::endl;
+	if (type == DOUBLE_NAN || type == FLOAT_NAN)
+		std::cout << "int: no int equivalent" << std::endl;
+	else	
+		std::cout << "int: " << _int << std::endl;
 	std::cout << "float: " << _float << "f" << std::endl;
 	std::cout << "double: " << _double << std::endl;
 }
 
 void ScalerConverter::converter()
 {
+	checkType();
 	void (ScalerConverter::*ptr[TYPES])() =
 	{
 		&ScalerConverter::convertInt,
 		&ScalerConverter::convertChar,
 		&ScalerConverter::convertFloat,
+		&ScalerConverter::convertDouble,
+		&ScalerConverter::convertFloat,
 		&ScalerConverter::convertDouble
 	};
 	(this->*ptr[type])();
+	conversionPrinter();
 }
