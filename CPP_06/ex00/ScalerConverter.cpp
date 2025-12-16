@@ -113,11 +113,13 @@ void conversionPrinter(Vars vars)
 		std::cout << "int: no int equivalent" << std::endl;
 	else	
 		std::cout << "int: " << vars.i << std::endl;
-	if (vars.f != std::floor(vars.f))
+	if (vars.f != std::floor(vars.f)
+		|| (vars.type == FLOAT_NAN || vars.type == DOUBLE_NAN))
 		std::cout << "float: " << vars.f << "f" << std::endl;
 	else
 		std::cout << "float: " << vars.f << ".0f" << std::endl;
-	if (vars.d != std::floor(vars.d))
+	if (vars.d != std::floor(vars.d)
+		|| (vars.type == FLOAT_NAN || vars.type == DOUBLE_NAN))
 		std::cout << "double: " << vars.d << std::endl;
 	else
 		std::cout << "double: " << vars.d << ".0" << std::endl;
