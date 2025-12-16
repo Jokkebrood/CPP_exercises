@@ -4,6 +4,7 @@
 #include <cctype>
 #include <cstdlib>
 #include <iostream>
+#include <cmath>
 
 #define INT 0
 #define CHAR 1
@@ -16,35 +17,16 @@
 class ScalerConverter
 {
 	public:
-		// constructors
-		ScalerConverter(std::string input);
-
-		//destructor
-		~ScalerConverter();
-
+		static void converter(std::string);
+		
 	private:
 		// constructors
 		ScalerConverter();
 		ScalerConverter(ScalerConverter &src);
 
+		//destructor
+		~ScalerConverter();
+
 		// operator overload functions
 		ScalerConverter& operator=(ScalerConverter &src);
-
-		// Functions
-		void converter();
-		void checkType();
-		void convertChar();
-		void convertInt();
-		void convertDouble();
-		void convertFloat();
-
-		void conversionPrinter();
-
-		// objects
-		std::string _input;
-		int _int;
-		char _char;
-		float _float;
-		double _double;
-		int type;
 };

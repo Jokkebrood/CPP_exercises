@@ -9,7 +9,7 @@ int main(int ac, char **av)
 	}
 	try
 	{
-		ScalerConverter converter(av[1]);
+		ScalerConverter::converter(av[1]);
 	}
 	catch (const std::runtime_error &e)
 	{

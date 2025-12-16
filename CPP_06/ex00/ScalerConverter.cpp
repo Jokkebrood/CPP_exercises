@@ -1,15 +1,18 @@
 #include "ScalerConverter.hpp"
 
+struct Vars {
+    int i;
+    char c;
+    float f;
+    double d;
+    int type;
+};
+
 ScalerConverter::ScalerConverter() {}
 
 ScalerConverter::ScalerConverter(ScalerConverter &src)
 {
 	*this = src;
-}
-
-ScalerConverter::ScalerConverter(std::string input) : _input(input)
-{
-	converter();
 }
 
 ScalerConverter::~ScalerConverter() {}
@@ -21,26 +24,23 @@ ScalerConverter& ScalerConverter::operator=(ScalerConverter &src)
 	return *this;
 }
 
-void ScalerConverter::checkType()
+int checkType(std::string _input)
 {
 	int dot = 0;
-
-	type = INT;
+	int type = INT;
 
 	// check for -inf, nanf, etc. exceptions
 	if (_input.compare("nan") == 0 || _input.compare("-inf") == 0
 		|| _input.compare("+inf") == 0)
 	{
-		type = DOUBLE_NAN;
-		return ;
+		return DOUBLE_NAN;
 	}
 	if (_input.compare("nanf") == 0 || _input.compare("-inff") == 0 ||
 		_input.compare("+inff") == 0)
 	{
-		type = FLOAT_NAN;
-		return ;
+		return FLOAT_NAN;
 	}
-	// check for type
+	// check for vars.type
 	if (_input.length() == 1 && !isdigit(_input[0]))
 	{
 		type = CHAR;
@@ -66,68 +66,77 @@ void ScalerConverter::checkType()
 	}
 	if (dot > 1)
 		throw std::runtime_error("ERROR: invalid input");
+	return type;
 }
 
-void ScalerConverter::convertChar()
+void convertChar(std::string _input, Vars *vars)
 {
-	_char = _input[0];
-	_int = (int)_char;
-	_double = (double)_char;
-	_float = (float)_char;
+	vars->c = _input[0];
+	vars->i = (int)vars->c;
+	vars->d = (double)vars->c;
+	vars->f = (float)vars->c;
 }
 
-void ScalerConverter::convertInt()
+void convertInt(std::string _input, Vars *vars)
 {
-	_int = atoi(_input.c_str());
-	_char = (char)_int;
-	_double = (double)_int;
-	_float = (float)_int;
+	vars->i = atoi(_input.c_str());
+	vars->c = (char)vars->i;
+	vars->d = (double)vars->i;
+	vars->f = (float)vars->i;
 }
 
-void ScalerConverter::convertFloat()
+void convertFloat(std::string _input, Vars *vars)
 {
-	_double = std::strtod(_input.c_str(), 0);
-	_float = static_cast<float>(_double);
-	_int = (int)_double;
-	_char = (char)_double;
+	vars->d = std::strtod(_input.c_str(), 0);
+	vars->f = static_cast<float>(vars->d);
+	vars->i = (int)vars->d;
+	vars->c = (char)vars->d;
 }
 
-void ScalerConverter::convertDouble()
+void convertDouble(std::string _input, Vars *vars)
 {
-	_double = std::strtod(_input.c_str(), 0);
-	_float = static_cast<float>(_double);
-	_int = (int)_double;
-	_char = (char)_double;
+	vars->d = std::strtod(_input.c_str(), 0);
+	vars->f = static_cast<float>(vars->d);
+	vars->i = (int)vars->d;
+	vars->c = (char)vars->d;
 }
 
-void ScalerConverter::conversionPrinter()
+void conversionPrinter(Vars vars)
 {
-	if (_char <= 31 || _char == 127)
+	if (vars.i <= 31 || (vars.i >= 127 && vars.i <= 255))
 		std::cout << "char: non printable char" << std::endl;
-	else if (_char > 127)
+	else if (vars.i > 255)
 		std::cout << "char: no char with this value" << std::endl;
 	else
-		std::cout << "char: " << _char << std::endl;
-	if (type == DOUBLE_NAN || type == FLOAT_NAN)
+		std::cout << "char: " << vars.c << std::endl;
+	if (vars.type == DOUBLE_NAN || vars.type == FLOAT_NAN)
 		std::cout << "int: no int equivalent" << std::endl;
 	else	
-		std::cout << "int: " << _int << std::endl;
-	std::cout << "float: " << _float << "f" << std::endl;
-	std::cout << "double: " << _double << std::endl;
+		std::cout << "int: " << vars.i << std::endl;
+	if (vars.f != std::floor(vars.f))
+		std::cout << "float: " << vars.f << "f" << std::endl;
+	else
+		std::cout << "float: " << vars.f << ".0f" << std::endl;
+	if (vars.d != std::floor(vars.d))
+		std::cout << "double: " << vars.d << std::endl;
+	else
+		std::cout << "double: " << vars.d << ".0" << std::endl;
 }
 
-void ScalerConverter::converter()
+void ScalerConverter::converter(std::string _input)
 {
-	checkType();
-	void (ScalerConverter::*ptr[TYPES])() =
+	Vars vars;
+	
+	vars.type = checkType(_input);
+	void (*ptr[TYPES])(std::string, Vars*) =
 	{
-		&ScalerConverter::convertInt,
-		&ScalerConverter::convertChar,
-		&ScalerConverter::convertFloat,
-		&ScalerConverter::convertDouble,
-		&ScalerConverter::convertFloat,
-		&ScalerConverter::convertDouble
+		&convertInt,
+		&convertChar,
+		&convertFloat,
+		&convertDouble,
+		&convertFloat,
+		&convertDouble
 	};
-	(this->*ptr[type])();
-	conversionPrinter();
+	(*ptr[vars.type])(_input, &vars);
+	conversionPrinter(vars);
 }
