@@ -23,6 +23,7 @@ int main()
 	std::cout <<
 	"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << std::endl;
 	std::cout << std::endl;
+
 	std::cout << "ORIGINAL STRING VALUES" << std::endl;
 	std::cout << "string a = " << stringA << std::endl;
 	std::cout << "string b = " << stringB << std::endl;
