@@ -1,6 +1,7 @@
 NAME = CPP06_ex01
 SRC =	main.cpp \
-		Serializer.cpp
+		Serializer.cpp \
+		Data.cpp
 OBJ_DIR = obj
 OBJ = $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 CC = c++
