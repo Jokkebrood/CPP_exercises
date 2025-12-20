@@ -22,7 +22,7 @@ int main()
 	std::cout << std::endl;
 
 	std::cout << "FUNCTION THAT PRINTS WHAT A NUMBER ADDED TO ITSELF IS" <<std::endl;
-	int list[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+	int list[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512};
 	::iter(list, 10, addition);
 	return 0;
 }
