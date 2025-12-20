@@ -60,5 +60,18 @@ int main()
 	std::cout << "the bigger number is: " << ::max(c, d) << std::endl;
 	std::cout << "the smaller number is: " << ::min(c, d) << std::endl;
 	std::cout << std::endl;
+
+	std::cout <<
+	"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << std::endl;
+	std::cout << std::endl;
+
+	::swap(stringA, stringB);
+
+	std::cout << "TESTING MIN MAX WITH STRING" << std::endl;
+	std::cout << "string a = " << stringA << std::endl;
+	std::cout << "string b = " << stringB << std::endl;
+	std::cout << "String with higher value: " << ::max(stringA, stringB) << std::endl;
+	std::cout << "String with lower value: " << ::min(stringA, stringB) << std::endl;
+	std::cout << std::endl;
 	return 0;
 }
