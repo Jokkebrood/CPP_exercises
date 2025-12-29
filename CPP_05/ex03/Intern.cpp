@@ -3,14 +3,21 @@
 #include "RobotomyRequestForm.hpp"
 #include "PresidentialPardonForm.hpp"
 
-Intern::Intern() {}
+Intern::Intern()
+{
+	std::cout << "Intern default constructor" <<std::endl;
+}
 
 Intern::Intern(Intern &src)
 {
+	std::cout << "Intern copy constructor" <<std::endl;
 	(void)src;
 }
 
-Intern::~Intern() {}
+Intern::~Intern()
+{
+	std::cout << "Intern destructor" <<std::endl;
+}
 
 Intern& Intern::operator=(Intern &src)
 {
