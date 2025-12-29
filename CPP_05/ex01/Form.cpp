@@ -2,15 +2,22 @@
 
 /************************* CONSTRUCTORS & DESTRUCTORS ******************************/
 
-Form::Form() : _name("file"), _signature(false), _signGrade(75), _execGrade(75) {}
+Form::Form() : _name("file"), _signature(false), _signGrade(75), _execGrade(75)
+{
+	std::cout << "Default file constructor. Name: " << _name << std::endl;
+}
 
 Form::Form(Form &src)
 	: _name(src._name), _signature(src._signature), _signGrade(src._signGrade),
-	_execGrade(src._execGrade) {}
+	_execGrade(src._execGrade)
+{
+	std::cout << "File copy constructor. Name: " << _name << std::endl;
+}
 
 Form::Form(std::string name, int signGrade, int execGrade)
 	: _name(name), _signature(false), _signGrade(signGrade), _execGrade(execGrade)
 {
+	std::cout << "Form input constructor. Nmae: " << _name << std::endl;
 	if (signGrade < 1)
 		throw Form::GradeTooHighException();
 	else if (signGrade > 150)
@@ -21,7 +28,10 @@ Form::Form(std::string name, int signGrade, int execGrade)
 		throw Form::GradeTooLowException();
 }
 
-Form::~Form() {}
+Form::~Form()
+{
+	std::cout << "File destructor. Name: " << _name << std::endl;
+}
 
 /********************************* OPERATORS *************************************/
 
@@ -51,15 +61,15 @@ int Form::getExecGrade() const { return _execGrade; }
 
 /*********************************** OTHER *************************************/
 
-AForm::SignTooLow::SignTooLow(Bureaucrat &bur, AForm &form)
+Form::SignTooLow::SignTooLow(Bureaucrat &bur, Form &form)
 	: _message(bur.getName() + " couldn't sign " + form.getName()
 	+ " because their grade is too low to sign\n") {}
 
-AForm::ExecTooLow::ExecTooLow(Bureaucrat &bur, AForm &form)
+Form::ExecTooLow::ExecTooLow(Bureaucrat &bur, Form &form)
 	: _message(bur.getName() + " couldn't sign " + form.getName()
 	+ " because their grade is too low to execute\n") {}
 
-AForm::BothTooLow::BothTooLow(Bureaucrat &bur, AForm &form)
+Form::BothTooLow::BothTooLow(Bureaucrat &bur, Form &form)
 	: _message(bur.getName() + " couldn't sign " + form.getName()
 	+ " because their grade is too low to execute or sign \n") {}
 

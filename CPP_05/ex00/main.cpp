@@ -7,11 +7,11 @@ int main()
 		std::cout << "This one increments too low" << std::endl;
 		Bureaucrat bureaucrat("Mr Low", 150);
 		std::cout << bureaucrat << std::endl;
-		bureaucrat--;
+		bureaucrat.raiseLevel();
 		std::cout << bureaucrat << std::endl;
-		bureaucrat++;
+		bureaucrat.lowerLevel();
 		std::cout << bureaucrat << std::endl;
-		bureaucrat++;
+		bureaucrat.lowerLevel();
 		std::cout << bureaucrat << std::endl;
 	}
 	catch (Bureaucrat::GradeTooLowException &e)
@@ -36,11 +36,11 @@ int main()
 		std::cout << "This one initializes too high" << std::endl;
 		Bureaucrat bureaucrat("Mr High", 1);
 		std::cout << bureaucrat << std::endl;
-		bureaucrat++;
+		bureaucrat.lowerLevel();
 		std::cout << bureaucrat << std::endl;
-		bureaucrat--;
+		bureaucrat.raiseLevel();
 		std::cout << bureaucrat << std::endl;
-		bureaucrat--;
+		bureaucrat.raiseLevel();
 		std::cout << bureaucrat << std::endl;
 	}
 	catch (Bureaucrat::GradeTooHighException &e)

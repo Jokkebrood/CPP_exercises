@@ -2,15 +2,22 @@
 
 /************************* CONSTRUCTORS & DESTRUCTORS ******************************/
 
-AForm::AForm() : _name("file"), _signature(false), _signGrade(75), _execGrade(75) {}
+AForm::AForm() : _name("file"), _signature(false), _signGrade(75), _execGrade(75)
+{
+	std::cout << "Default file constructor. Name: " << _name << std::endl;
+}
 
 AForm::AForm(AForm &src)
 	: _name(src._name), _signature(src._signature), _signGrade(src._signGrade),
-	_execGrade(src._execGrade) {}
+	_execGrade(src._execGrade) 
+{
+	std::cout << "File copy constructor. Name: " << _name << std::endl;
+}
 
 AForm::AForm(std::string name, int signGrade, int execGrade)
 	: _name(name), _signature(false), _signGrade(signGrade), _execGrade(execGrade)
 {
+	std::cout << "Form input constructor. Nmae: " << _name << std::endl;
 	if (signGrade < 1)
 		throw AForm::GradeTooHighException();
 	else if (signGrade > 150)
@@ -21,7 +28,10 @@ AForm::AForm(std::string name, int signGrade, int execGrade)
 		throw AForm::GradeTooLowException();
 }
 
-AForm::~AForm() {}
+AForm::~AForm()
+{
+	std::cout << "File destructor. Name: " << _name << std::endl;
+}
 
 /********************************* OPERATORS *************************************/
 
@@ -49,19 +59,17 @@ int AForm::getSignGrade() const { return _signGrade; }
 
 int AForm::getExecGrade() const { return _execGrade; }
 
-/*********************************** OTHER *************************************/
+/****************************** EXCEPTION FUNCTIONS ****************************/
 
-AForm::SignTooLow::SignTooLow(Bureaucrat &bur, AForm &form)
-	: _message(bur.getName() + " couldn't sign " + form.getName()
-	+ " because their grade is too low to sign\n") {}
+const char *AForm::GradeTooLowException::what() const throw()
+{
+	return "ERROR: grade too low";
+}
 
-AForm::ExecTooLow::ExecTooLow(Bureaucrat &bur, AForm &form)
-	: _message(bur.getName() + " couldn't sign " + form.getName()
-	+ " because their grade is too low to execute\n") {}
-
-AForm::BothTooLow::BothTooLow(Bureaucrat &bur, AForm &form)
-	: _message(bur.getName() + " couldn't sign " + form.getName()
-	+ " because their grade is too low to execute or sign \n") {}
+const char *AForm::GradeTooHighException::what() const throw()
+{
+	return "ERROR: grade too high";
+}
 
 const char *AForm::BothTooLow::what() const throw()
 {
@@ -77,6 +85,29 @@ const char *AForm::ExecTooLow::what() const throw()
 {
 	return _message.c_str();
 }
+
+AForm::BothTooLow::~BothTooLow() throw()
+{}
+
+AForm::SignTooLow::~SignTooLow() throw()
+{}
+
+AForm::ExecTooLow::~ExecTooLow() throw()
+{}
+
+/*********************************** OTHER *************************************/
+
+AForm::SignTooLow::SignTooLow(Bureaucrat &bur, AForm &form)
+	: _message(bur.getName() + " couldn't sign " + form.getName()
+	+ " because their grade is too low to sign\n") {}
+
+AForm::ExecTooLow::ExecTooLow(Bureaucrat &bur, AForm &form)
+	: _message(bur.getName() + " couldn't sign " + form.getName()
+	+ " because their grade is too low to execute\n") {}
+
+AForm::BothTooLow::BothTooLow(Bureaucrat &bur, AForm &form)
+	: _message(bur.getName() + " couldn't sign " + form.getName()
+	+ " because their grade is too low to execute or sign \n") {}
 
 void AForm::execute(Bureaucrat& bur)
 {

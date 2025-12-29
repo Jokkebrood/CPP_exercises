@@ -1,15 +1,27 @@
 #include "RobotomyRequestForm.hpp"
 
 RobotomyRequestForm::RobotomyRequestForm()
-	: AForm("RobotomyRequestForm", 72, 45), _target("default") {}
+	: AForm("RobotomyRequestForm", 72, 45), _target("default")
+{
+	std::cout << "RobotomyRequestForm default constructor" << std::endl;
+}
 
 RobotomyRequestForm::RobotomyRequestForm(const std::string target)
-	: AForm("RobotomyRequestForm", 72, 45), _target(target) {}
+	: AForm("RobotomyRequestForm", 72, 45), _target(target)
+{
+	std::cout << "RobotomyRequestForm input constructor" << std::endl;
+}
 
 RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &src)
-	: AForm("RobotomyRequestForm", 72, 45), _target(src.getTarget()) {}
+	: AForm("RobotomyRequestForm", 72, 45), _target(src.getTarget())
+{
+	std::cout << "RobotomyRequestForm copy constructor" << std::endl;
+}
 
-RobotomyRequestForm::~RobotomyRequestForm() {}
+RobotomyRequestForm::~RobotomyRequestForm()
+{
+	std::cout << "RobotomyRequestForm destructor" << std::endl;
+}
 
 RobotomyRequestForm& RobotomyRequestForm::operator=(RobotomyRequestForm &src)
 {

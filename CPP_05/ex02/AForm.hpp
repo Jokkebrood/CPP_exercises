@@ -22,27 +22,21 @@ class AForm
 		class GradeTooLowException : public std::exception
 		{
 			public:
-				virtual const char *what() const throw()
-				{
-					return "ERROR: Grade too low";
-				}
+				const char *what() const throw();
 		};
 
 		class GradeTooHighException : public std::exception
 		{
 			public:
-				virtual const char *what() const throw()
-				{
-					return "ERROR: Grade too high";
-				}
+				const char *what() const throw();
 		};	
 
 		class BothTooLow : public std::exception
 		{
 			public:
 				BothTooLow(Bureaucrat &bur, AForm &form);
-				virtual ~BothTooLow() throw() {}
-				virtual const char *what() const throw();
+				~BothTooLow() throw();
+				const char *what() const throw();
 			private:
 				std::string _message;
 		};
@@ -51,8 +45,8 @@ class AForm
 		{
 			public:
 				SignTooLow(Bureaucrat &bur, AForm &form);
-				virtual ~SignTooLow() throw() {}
-				virtual const char *what() const throw();
+				~SignTooLow() throw();
+				const char *what() const throw();
 			private:
 				std::string _message;
 		};
@@ -61,8 +55,8 @@ class AForm
 		{
 			public:
 				ExecTooLow(Bureaucrat &bur, AForm &form);
-				virtual ~ExecTooLow() throw() {}
-				virtual const char *what() const throw();
+				~ExecTooLow() throw();
+				const char *what() const throw();
 			private:
 				std::string _message;
 		};

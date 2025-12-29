@@ -11,28 +11,22 @@ class Bureaucrat
 		~Bureaucrat();
 
 		Bureaucrat& operator=(const Bureaucrat &src);
-		void operator++(int);
-		void operator--(int);
 
 		int getGrade() const;
+		void raiseLevel();
+		void lowerLevel();
 		std::string getName() const;
 
 		class GradeTooLowException : public std::exception
 		{
 			public:
-				virtual const char *what() const throw()
-				{
-					return "ERROR: Grade too low";
-				}
+				const char *what() const throw();
 		};
 
 		class GradeTooHighException : public std::exception
 		{
 			public:
-				virtual const char *what() const throw()
-				{
-					return "ERROR: Grade too high";
-				}
+				const char *what() const throw();
 		};
 
 	private:

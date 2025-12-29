@@ -1,15 +1,27 @@
 #include "PresidentialPardonForm.hpp"
 
 PresidentialPardonForm::PresidentialPardonForm()
-	: AForm("PresidentialPardonForm", 25, 5), _target("default") {}
+	: AForm("PresidentialPardonForm", 25, 5), _target("default")
+{
+	std::cout << "PresidentialPardonForm default constructor" << std::endl;
+}
 
 PresidentialPardonForm::PresidentialPardonForm(const std::string target)
-	: AForm("PresidentialPardonForm", 25, 5), _target(target) {}
+	: AForm("PresidentialPardonForm", 25, 5), _target(target)
+{
+	std::cout << "PresidentialPardonForm input constructor" << std::endl;
+}
 
 PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm &src)
-	: AForm("PresidentialPardonForm", 25, 5), _target(src.getTarget()) {}
+	: AForm("PresidentialPardonForm", 25, 5), _target(src.getTarget())
+{
+	std::cout << "PresidentialPardonForm copy constructor" << std::endl;
+}
 
-PresidentialPardonForm::~PresidentialPardonForm() {}
+PresidentialPardonForm::~PresidentialPardonForm()
+{
+	std::cout << "PresidentialPardonForm destructor" << std::endl;
+}
 
 PresidentialPardonForm& PresidentialPardonForm::operator=(PresidentialPardonForm &src)
 {

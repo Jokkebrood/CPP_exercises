@@ -34,14 +34,14 @@ Bureaucrat& Bureaucrat::operator=(const Bureaucrat &src)
 	return *this;
 }
 
-void Bureaucrat::operator++(int)
+void Bureaucrat::lowerLevel()
 {
 	if (_grade >= 150)
 		throw Bureaucrat::GradeTooLowException();
 	_grade++;
 }
 
-void Bureaucrat::operator--(int)
+void Bureaucrat::raiseLevel()
 {
 	if (_grade <= 1)
 		throw Bureaucrat::GradeTooHighException();
