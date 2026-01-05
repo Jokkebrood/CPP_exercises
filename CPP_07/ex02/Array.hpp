@@ -1,5 +1,8 @@
 #pragma once
 
+#include <iostream>
+#include <string>
+
 template<typename T>
 class Array
 {
@@ -8,6 +11,7 @@ class Array
 		Array();
 		Array(Array &src);
 
+		Array(int n);
 		// Destuctor
 		~Array();
 
@@ -20,4 +24,5 @@ class Array
 		// Functions
 	private:
 		T array[];
+		int _n;
 };
