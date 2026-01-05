@@ -1,14 +1,22 @@
 #include "Serializer.hpp"
 
 // Constructors
-Serializer::Serializer() {}
+Serializer::Serializer()
+{
+	std::cout << "Serializer default constructor" << std::endl;
+}
+
 Serializer::Serializer(Serializer &src)
 {
+	std::cout << "Serializer copy constructor" << std::endl;
 	*this = src;
 }
 
 // Destructor
-Serializer::~Serializer() {}
+Serializer::~Serializer()
+{
+	std::cout << "Serializer destructor" << std::endl;
+}
 
 // Overload operator
 Serializer &Serializer::operator=(Serializer &src)
