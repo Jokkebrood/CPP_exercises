@@ -22,28 +22,43 @@ Base* generate()
 
 void identify(Base *p)
 {
-	//std::cout << "Pointer identify called" << std::endl;
-	if (dynamic_cast<A const*>(p))
-		std::cout  << "A" << std::endl;
-
-	else if (dynamic_cast<B const*>(p))
-		std::cout << "B" <<std::endl;
-
+//	std::cout << "Pointer identify called" << std::endl;
+	if (dynamic_cast<A const*>(p) == NULL)
+	{
+		if (dynamic_cast<B const*>(p) == NULL)
+		{
+			if (dynamic_cast<C const*>(p) == NULL)
+				std::cout << "Dynamic cast return NULL in every case" << std::endl;
+			else
+				std::cout << "C" << std::endl;
+		}
+		else
+			std::cout << "B" <<std::endl;
+	}
 	else
-		std::cout << "C" << std::endl;
+		std::cout  << "A" << std::endl;
 }
 
 void identify(Base &p)
 {
-	//std::cout << "Reference identify called" << std::endl;
-	if (dynamic_cast<A const*>(&p))
+//	std::cout << "Reference identify called" << std::endl;
+	try
+	{
+		(void)dynamic_cast<A const&>(p);
 		std::cout  << "A" << std::endl;
-
-	else if (dynamic_cast<B const*>(&p))
-		std::cout << "B" <<std::endl;
-
-	else
-		std::cout << "C" << std::endl;
+	}
+	catch (...)
+	{
+		try
+		{
+			(void)dynamic_cast<B const&>(p);
+			std::cout << "B" <<std::endl;
+		}
+		catch (...)
+		{
+			std::cout << "C" << std::endl;
+		}
+	}
 }
 
 int main()
