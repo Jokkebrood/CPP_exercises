@@ -86,7 +86,7 @@ void convertChar(std::string _input, Vars *vars)
 
 void convertInt(std::string _input, Vars *vars)
 {
-	vars->i = atol(_input.c_str());
+	vars->i = std::atol(_input.c_str());
 	vars->c = (char)vars->i;
 	vars->d = (double)vars->i;
 	vars->f = (float)vars->i;
@@ -130,9 +130,9 @@ void conversionPrinter(Vars vars)
 		|| (vars.type == FLOAT_NAN || vars.type == DOUBLE_NAN))
 		std::cout << "float: " << vars.f << "f" << std::endl;
 	else
-
-
 		std::cout << "float: " << vars.f << ".0f" << std::endl;
+
+
 	if (vars.d != std::floor(vars.d)
 		|| (vars.type == FLOAT_NAN || vars.type == DOUBLE_NAN))
 		std::cout << "double: " << vars.d << std::endl;
