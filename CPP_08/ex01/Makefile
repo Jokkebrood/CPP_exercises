@@ -1,5 +1,6 @@
 NAME = CPP08_ex01
-SRC =	main.cpp
+SRC =	main.cpp \
+		Span.cpp
 OBJ_DIR = obj
 OBJ = $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 CC = c++

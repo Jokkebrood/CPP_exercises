@@ -1,10 +1,10 @@
 #ifndef SPAN_HPP
 #define SPAN_HPP
 
-#include <cmath>
 #include <vector>
+#include <exception>
+#include <iostream>
 
-template <typename T>
 class Span
 {
 	private:
@@ -12,21 +12,21 @@ class Span
 		std::vector<int> list;
 	public:
 		//constructors
-		Span();
-//		Span(Span &src);
 		Span(unsigned int n);
+		Span();
+		Span(const Span &src);
 
 		//destructor
 		~Span();
 	
 		//copy assignment operator
-		Span operator=(Span &src);
+		Span& operator=(const Span &src);
 
 		//functions
 		void addNumber(int nr);	
 
-		unsigned int shortestSpan();
-		unsigned int longestSpan();
+		unsigned int shortestSpan() const;
+		unsigned int longestSpan() const;
 };
 
 #endif
