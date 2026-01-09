@@ -55,7 +55,10 @@ int diff(int a, int b)
 
 unsigned int Span::shortestSpan() const
 {
-	int shortest = 0;
+	if (list.size() < 2)
+		throw std::length_error("Cannot perform comparison on container with less then 2 values");
+
+	int shortest = diff(list[0], list[1]);
 
 	for (size_t i = 1; i < list.size(); i++)
 	{
@@ -67,6 +70,9 @@ unsigned int Span::shortestSpan() const
 
 unsigned int Span::longestSpan() const
 {
+	if (list.size() < 2)
+		throw std::length_error("Cannot perform comparison on container with less then 2 values");
+
 	int longest = 0;
 
 	for (size_t i = 1; i < list.size(); i++)
