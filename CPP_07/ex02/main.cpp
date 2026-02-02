@@ -7,7 +7,7 @@ int main()
 	try
 	{
 		int j;
-		j = b[13];
+		j = b[12];
 	}
 	catch (const std::invalid_argument& e)
 	{

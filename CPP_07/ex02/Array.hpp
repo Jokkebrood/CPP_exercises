@@ -13,7 +13,7 @@ class Array
 		Array();
 		Array(Array const &src);
 
-		Array(int n);
+		Array(unsigned int n);
 		// Destuctor
 		~Array();
 

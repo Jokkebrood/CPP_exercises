@@ -9,7 +9,7 @@ Array<T>::Array() : _n(0)
 }
 
 template <typename T>
-Array<T>::Array(int n) : _n(n)
+Array<T>::Array(unsigned int n) : _n(n)
 {
 	std::cout << "Array default constructor" << std::endl;
 	array = new T[n];
@@ -46,7 +46,7 @@ Array<T>& Array<T>::operator=(Array<T> const &src)
 template <typename T>
 T& Array<T>::operator[](unsigned int i)
 {
-	if (i < _n)
+	if (i >= _n)
 		throw std::invalid_argument("this object does not exist");
 	return array[i];
 }
