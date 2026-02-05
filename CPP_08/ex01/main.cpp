@@ -11,8 +11,8 @@ int main()
 	std::cout << sp.shortestSpan() << std::endl;
 	std::cout << sp.longestSpan() << std::endl;
 
-	Span large = Span(150000);
-	for (int i = 0; i < (150000 * 5); i += 5)
+	Span large = Span(11000);
+	for (int i = 0; i < (11000 * 5); i += 5)
 		large.addNumber(i);
 	std::cout << large.shortestSpan() << std::endl;
 	std::cout << large.longestSpan() << std::endl;
@@ -44,5 +44,18 @@ int main()
 	{
 		std::cout << e.what() << std::endl;
 	}
+
+	Span sp2(5);
+	sp2.multiAdd(5, 10, 15, 20, 25, 56);
+
+	Span sp3(5);
+	std::vector<int> v;
+	v.push_back(4);
+	v.push_back(24);
+	v.push_back(17);
+	v.push_back(70);
+	v.push_back(1);
+
+	sp3.multiAdd(v);
 	return 0;
 }

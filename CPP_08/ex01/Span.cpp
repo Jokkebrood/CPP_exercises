@@ -45,6 +45,27 @@ void Span::addNumber(int nr)
 	list.push_back(nr);
 }
 
+void Span::multiAdd(unsigned int count, ...)
+{
+	if (list.size() + count > N)
+		throw std::overflow_error("Container is full. Cannot add another integer");
+	va_list va;
+	va_start(va, count);	
+	for (unsigned int i = 0; i < count; i++)
+		addNumber(va_arg(va, int));
+	va_end(va);
+}
+
+void Span::multiAdd(std::vector<int> v)
+{
+	std::vector<int>::iterator begin = v.begin();
+	std::vector<int>::iterator end = v.end();
+
+	if (list.size() + std::distance(begin, end) > N)
+		throw std::overflow_error("Container is full. Cannot add another integer");
+	list.insert(list.end(), begin, end);
+}
+
 int diff(int a, int b)
 {
 	if (a > b)
@@ -58,12 +79,15 @@ unsigned int Span::shortestSpan() const
 	if (list.size() < 2)
 		throw std::length_error("Cannot perform comparison on container with less then 2 values");
 
-	int shortest = diff(list[0], list[1]);
+	unsigned int shortest = std::floor(diff(list[0], list[1]));
 
-	for (size_t i = 1; i < list.size(); i++)
+	for (size_t i = 0; i < list.size(); i++)
 	{
-		if (diff(list[i], list[i - 1]) < shortest)
-			shortest = diff(list[i], list[i - 1]);
+		for (size_t j = 0; j < list.size(); j++)
+		{
+			if (std::floor(diff(list[i], list[j])) < shortest && i != j)
+				shortest = diff(list[i], list[j]);
+		}
 	}
 	return shortest;
 }
@@ -73,12 +97,15 @@ unsigned int Span::longestSpan() const
 	if (list.size() < 2)
 		throw std::length_error("Cannot perform comparison on container with less then 2 values");
 
-	int longest = 0;
+	unsigned int longest = std::floor(diff(list[0], list[1]));
 
-	for (size_t i = 1; i < list.size(); i++)
+	for (size_t i = 0; i < list.size(); i++)
 	{
-		if (diff(list[i], list[i - 1]) > longest)
-			longest = diff(list[i], list[i - 1]);
+		for (size_t j = 0; j < list.size(); j++)
+		{
+			if (std::floor(diff(list[i], list[j])) > longest)
+				longest = diff(list[i], list[j]);
+		}
 	}
 	return longest;
 }

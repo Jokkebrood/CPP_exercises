@@ -4,6 +4,8 @@
 #include <vector>
 #include <exception>
 #include <iostream>
+#include <cmath> // std::floor()
+#include <cstdarg> // va_list
 
 class Span
 {
@@ -27,6 +29,8 @@ class Span
 
 		unsigned int shortestSpan() const;
 		unsigned int longestSpan() const;
+		void multiAdd(unsigned int count ...);
+		void multiAdd(std::vector<int> v);
 };
 
 #endif
