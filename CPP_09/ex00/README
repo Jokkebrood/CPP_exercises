@@ -1,0 +1,21 @@
+  .oooooo.                   .o8                 oooo                        o8o            
+ d8P'  `Y8b                 "888                 `888                        `"'            
+888           .ooooo.   .oooo888   .ooooo.        888   .ooooo.   .oooooooo oooo   .ooooo.  
+888          d88' `88b d88' `888  d88' `88b       888  d88' `88b 888' `88b  `888  d88' `"Y8 
+888          888   888 888   888  888ooo888       888  888   888 888   888   888  888       
+`88b    ooo  888   888 888   888  888    .o       888  888   888 `88bod8P'   888  888   .o8 
+ `Y8bood8P'  `Y8bod8P' `Y8bod88P" `Y8bod8P'      o888o `Y8bod8P' `8oooooo.  o888o `Y8bod8P' 
+                                                                 d"     YD                  
+                                                                 "Y88888P'                  
+
+1)	MAKE MAP
+	a)	I create a std::map<std::string, std::float>
+
+	b)	I create an element of map for every date starting at 2009-01-02
+		and ending at the end of the data.csv file.
+		The std::string represents the date (e.g. "2020-05-30").
+		The float represents the approximate value of a bitcoin that day.
+
+2) PARSE INPUT FILE
+	a)	Check if line has valid date format
+	b)	Check if date 
