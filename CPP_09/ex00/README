@@ -17,5 +17,7 @@
 		The float represents the approximate value of a bitcoin that day.
 
 2) PARSE INPUT FILE
-	a)	Check if line has valid date format
-	b)	Check if date 
+	a)	Check if line has valid syntax:
+		-Date
+		-Seperator
+		-amount
