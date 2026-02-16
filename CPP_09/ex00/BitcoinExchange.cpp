@@ -19,7 +19,7 @@ FindData::FindData(std::string input)
 	std::string inputLine;
 	while (getline(inputFile, inputLine))
 	{
-		std::cout << createOutputLine(inputLine) << std::endl;
+		std::cout << errorCheck(inputLine) << std::endl;
 	}
 }
 
@@ -30,9 +30,22 @@ std::map<std::string, double> FindData::getAllData() const
 	return allData;
 }
 
+std::string FindData::createOutputLine(std::string inputLine, std::string valDate)
+{
+	double worth;
+	std::map<std::string, double>::iterator it = allData.find(valDate);
 
+	if (atof(inputLine.substr(13, inputLine.length() - 13).c_str()) > 2147483647 ||
+			inputLine.substr(13, inputLine.length() - 13).length() > 10)
+		return "\033[31mERROR: Bitcoin amount too large -> \033[0m\"" +
+			inputLine.substr(13, inputLine.length() - 14) + '"';
 
-std::string FindData::createOutputLine(std::string inputLine)
+	worth = it->second * atof(inputLine.substr(13, inputLine.length() - 13).c_str());
+	valDate += " -> " + inputLine.substr(13, inputLine.length() - 13) + " -> " + itos(worth);
+	return valDate;
+}
+
+std::string FindData::errorCheck(std::string inputLine)
 {
 	// Every invalid input error
 	if (inputLine.length() < 14)
@@ -53,50 +66,18 @@ std::string FindData::createOutputLine(std::string inputLine)
 
 	else
 	{
-		double worth;
 		std::string outputLine = inputLine.substr(0, 10);
 
 		if (allData.find(outputLine) != allData.end())
-		{
-			std::map<std::string, double>::iterator it = allData.find(outputLine);
-
-			if (atof(inputLine.substr(13, inputLine.length() - 13).c_str()) > 2147483647 ||
-					inputLine.substr(13, inputLine.length() - 13).length() > 10)
-				return "\033[31mERROR: Bitcoin amount too large -> \033[0m\"" +
-					inputLine.substr(13, inputLine.length() - 14) + '"';
-
-			worth = it->second * atof(inputLine.substr(13, inputLine.length() - 13).c_str());
-			outputLine += " -> " + inputLine.substr(13, inputLine.length() - 13) + " -> " + itos(worth);
-		}
+			outputLine = createOutputLine(inputLine, outputLine);
 		else
-		{	
+		{
 			Date date = dataLineToDate(inputLine.substr(0, 10));
 			if (date.y < 2009 || (date.y == 2009 && date.m == 1 && date.d == 1))
-			{
-				std::map<std::string, double>::iterator it = allData.find("2009-01-02");
-
-				if (atof(inputLine.substr(13, inputLine.length() - 13).c_str()) > 2147483647 ||
-						inputLine.substr(13, inputLine.length() - 13).length() > 10)
-				return "\033[31mERROR: Bitcoin amount too large -> \033[0m\"" +
-				inputLine.substr(13, inputLine.length() - 14) + '"';
-
-				worth = it->second * atof(inputLine.substr(13, inputLine.length() - 13).c_str());
-				outputLine += " -> " + inputLine.substr(13, inputLine.length() - 13) + " -> " + itos(worth);
-			}
+				outputLine = createOutputLine(inputLine, "2009-01-02");
 			else
-			{
-				std::map<std::string, double>::iterator it = allData.find("2022-03-29");
-
-				if (atof(inputLine.substr(13, inputLine.length() - 13).c_str()) > 2147483647 ||
-						inputLine.substr(13, inputLine.length() - 13).length() > 10)
-				return "\033[31mERROR: Bitcoin amount too large -> \033[0m\"" +
-				inputLine.substr(13, inputLine.length() - 14) + '"';
-
-				worth = it->second * atof(inputLine.substr(13, inputLine.length() - 13).c_str());
-				outputLine += " -> " + inputLine.substr(13, inputLine.length() - 13) + " -> " + itos(worth);
-			}
+				outputLine = createOutputLine(inputLine, "2022-03-29");
 		}
-
 		return outputLine;
 	}
 }

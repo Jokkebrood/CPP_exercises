@@ -52,7 +52,8 @@ class FindData
 
 		// functions
 		void makeDataMap();
-		std::string createOutputLine(std::string inputLine);
+		std::string createOutputLine(std::string inputLine, std::string valDate);
+		std::string errorCheck(std::string inputLine);
 };
 
 template<typename T>
