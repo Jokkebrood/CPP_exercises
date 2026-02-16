@@ -1,0 +1,44 @@
+▗▄▄▄▖ ▗▄▖ ▗▄▄▖ ▗▄▄▄        ▗▖ ▗▄▖ ▗▖ ▗▖▗▖  ▗▖ ▗▄▄▖ ▗▄▖ ▗▖  ▗▖    ▗▄▄▄▖▗▖  ▗▖▗▄▄▖ ▗▖    ▗▄▖ ▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▄▄▄ 
+▐▌   ▐▌ ▐▌▐▌ ▐▌▐▌  █       ▐▌▐▌ ▐▌▐▌ ▐▌▐▛▚▖▐▌▐▌   ▐▌ ▐▌▐▛▚▖▐▌    ▐▌    ▝▚▞▘ ▐▌ ▐▌▐▌   ▐▌ ▐▌  █  ▐▛▚▖▐▌▐▌   ▐▌  █
+▐▛▀▀▘▐▌ ▐▌▐▛▀▚▖▐▌  █       ▐▌▐▌ ▐▌▐▛▀▜▌▐▌ ▝▜▌ ▝▀▚▖▐▌ ▐▌▐▌ ▝▜▌    ▐▛▀▀▘  ▐▌  ▐▛▀▘ ▐▌   ▐▛▀▜▌  █  ▐▌ ▝▜▌▐▛▀▀▘▐▌  █
+▐▌   ▝▚▄▞▘▐▌ ▐▌▐▙▄▄▀    ▗▄▄▞▘▝▚▄▞▘▐▌ ▐▌▐▌  ▐▌▗▄▄▞▘▝▚▄▞▘▐▌  ▐▌    ▐▙▄▄▖▗▞▘▝▚▖▐▌   ▐▙▄▄▖▐▌ ▐▌▗▄█▄▖▐▌  ▐▌▐▙▄▄▖▐▙▄▄▀
+                                                                                                                
+The ford johnson algorithm is a sorting algorithm designed to sort with
+a minimal amount of comparisons between elements. It was developed by
+Lester Randolph Ford Jr. and Selmer Martin Johnson, and published in 1959.
+
+It is also refered to as merge-insertion sort.
+
+Explation of the algorithm :
+
+1)	Devide the elements (keys)  into pairs, leaving one key out if n is odd.
+	Call the larger key of the i‑th pair aᵢ and the smaller bᵢ.
+
+	┌─┬─┬─┬─┬─┬─┬─┬─┬─┐
+	│8│5│1│4│9│2│6│3│7│
+	└─┴─┴─┴─┴─┴─┴─┴─┴─┘
+	┌─┬─┐┌─┬─┐┌─┬─┐┌─┬─┐┌─┐
+	│5│8││1│4││2│9││3│6││7│
+	├─┼─┤├─┼─┤├─┼─┤├─┼─┤├─┤
+	│b│a││b│a││b│a││b│a││/│
+	└─┴─┘└─┴─┘└─┴─┘└─┴─┘└─┘
+
+	Another way to visualize this is like this:
+
+		┌─┬─┬─┬─┐
+	A:	│8│4│9│6│
+		└─┴─┴─┴─┘
+		 ⬆ ⬆ ⬆ ⬆
+		┌─┬─┬─┬─┐┌─┐
+	B:	│5│1│2│3││7│
+		└─┴─┴─┴─┘└─┘
+
+2) Now repeat this step with the elements in row A making while keeping 
+	
+		┌─┬─┐┌─┬─┐
+	A:	│4│8││6│9│
+		└─┴─┘└─┴─┘
+		 ⬆ ⬆  ⬆ ⬆
+		┌─┬─┐┌─┬─┐┌─┐
+	B:	│1│5││3│2││7│
+		└─┴─┘└─┴─┘└─┘
