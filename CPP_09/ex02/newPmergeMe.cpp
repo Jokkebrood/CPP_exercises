@@ -1,4 +1,4 @@
-#include "PmergeMe.hpp"
+#include "newPmergeMe.hpp"
 
 // CONSTRUCTORS & DESTRUCTORS
 PmergeMe::PmergeMe() {}
@@ -7,9 +7,11 @@ PmergeMe::PmergeMe(PmergeMe &src)
 	*this = src;
 }
 
-int power2fit(int size)
+// Checks the largest power of 2 that fits inside size
+// e.g. for 61 it would be 32, for 64 it would be 64, for 100 ti would be 64, etc.
+unsigned long power2fit(unsigned long size)
 {
-	int i = 1;
+	unsigned long i = 1;
 	while (i <= size)
 		i *= 2;
 	if (i != 1)
@@ -25,18 +27,10 @@ PmergeMe::PmergeMe(int ac, char **input) : comparisons(0)
 	for (int i = 1; input[i]; i++)
 		addList(input[i]);
 
-	if (numbers.size() % 2 != 0)
-	{
-		leftover.push_back(numbers.back().back());
-		numbers.pop_back();
-	}
-
 	unsigned long maxSize = power2fit(numbers.size());
 	while (numbers.begin()->size() != maxSize)
 		mergeSort();
-	
-	numbers.push_back(leftover);
-	
+
 	while (numbers.begin()->size() != 1)
 	{
 		makeMainPend();
@@ -47,6 +41,7 @@ PmergeMe::PmergeMe(int ac, char **input) : comparisons(0)
 PmergeMe::~PmergeMe() {}
 
 // GETTERS
+
 const std::vector< std::list<int> > &PmergeMe::getNumbers() const
 {
 	return numbers;
@@ -59,32 +54,30 @@ const int &PmergeMe::getComparisons() const
 
 // FUNCTIONS
 
-// Takes pairs of lists inside the vector and merges them.
-// The size of the last element of each list it will decide which one to append.
+// Merge sorts
 void PmergeMe::mergeSort()
 {
 	std::vector< std::list<int> >::iterator it = numbers.begin();
-	std::vector< std::list<int> >::iterator temp = numbers.begin();
-	temp++;
+	std::vector< std::list<int> >::iterator itNext = numbers.begin();
+	itNext++;
 
-	for (; temp != numbers.end(); it++, temp++)
+	for (; itNext != numbers.end(); itNext++, it++)
 	{
 		if (it->empty())
+			; // nothing
+		else if(!itNext->empty() && it->size() == itNext->size())
 		{
-			// nothing
-		}
-		else if(!temp->empty() && it->size() == temp->size())
-		{
-			if (it->back() > temp->back())
+			comparisons++;
+			if (it->back() > itNext->back())
 			{
-				temp->splice(temp->end(), *it);
-				std::rotate(it, temp, temp + 1);
+				itNext->splice(itNext->end(), *it);
+				std::rotate(it, itNext, itNext + 1);
 			}
 			else
-				it->splice(it->end(), *temp);
-			comparisons++;
+				it->splice(it->end(), *itNext);
 		}
 	}
+
 	for (int i = numbers.size() - 1; i >= 0; i--)
 	{
 		if (numbers[i].empty())
@@ -92,14 +85,13 @@ void PmergeMe::mergeSort()
 	}
 }
 
-void PmergeMe::addList(char *nr)
+// Throws error if nr is not convertable to an int
+// else returns int conversion of nr
+int errorManagement(char *nr)
 {
 	char *end;
 	long i = std::strtol(nr, &end, 10);
 
-	std::list<int> list;
-
-	// ERROR  MANAGEMENT
 	if (*end != '\0')
 	{
 		throw std::runtime_error("'" + std::string(nr) + "' is not a valid integer");
@@ -112,8 +104,14 @@ void PmergeMe::addList(char *nr)
 	{
 		throw std::runtime_error("'" + std::string(nr) + "' is too large to be an integer");
 	}
+	return i;
+}
 
-	list.push_back(i);
+void PmergeMe::addList(char *nr)
+{
+	std::list<int> list;
+
+	list.push_back(errorManagement(nr));
 
 	numbers.push_back(list);
 }
@@ -121,17 +119,8 @@ void PmergeMe::addList(char *nr)
 //**********************************************************************************************
 void PmergeMe::printAll()
 {
-    std::cout << "numbers: ";
-    for (std::vector< std::list<int> >::iterator it = numbers.begin(); it != numbers.end(); it++)
-    {
-        for (std::list<int>::iterator listIt = it->begin(); listIt != it->end(); listIt++)
-            std::cout << *listIt << " ";
-        std::cout << "| ";
-    }
-    std::cout << std::endl;
-
-    std::cout << "main: ";
-    for (std::vector< std::pair<int, std::list<int> > >::iterator it = main.begin(); it != main.end(); it++)
+    std::cout << "mainChain: ";
+    for (std::vector< std::pair<int, std::list<int> > >::iterator it = mainChain.begin(); it != mainChain.end(); it++)
     {
         std::cout << "(" << it->first << ") ";
         for (std::list<int>::iterator listIt = it->second.begin(); listIt != it->second.end(); listIt++)
@@ -158,10 +147,11 @@ void PmergeMe::printAll()
         std::cout << "| ";
     }
     std::cout << std::endl;
+    std::cout << "------------------------------------------------" << std::endl;
 }
 //**********************************************************************************************
 
-// Adds a single element to either the main or pend vector. 
+// Adds a single element to either the mainChain or pend vector.
 void addMainPendElement(int i, int len,
 	std::vector< std::pair<int, std::list<int> > > &maPe,
 	std::vector< std::list<int> >::iterator &itNum)
@@ -181,7 +171,7 @@ void addMainPendElement(int i, int len,
 	}
 }
 
-// Creates the main and pend vectors
+// Creates the mainChain and pend vectors
 void PmergeMe::makeMainPend()
 {
 	std::vector< std::list<int> >::iterator itNum = numbers.begin();
@@ -189,24 +179,29 @@ void PmergeMe::makeMainPend()
 	unsigned long len = itNum->size();
 	int i = 0;
 
-	for (; itNum->size() == len; i++)
+	// mainChain pend loop
+	for (; itNum != numbers.end() && itNum->size() == len; i++)
 	{
 		if (i % 2 == 1 || i == 0)
-			addMainPendElement(i, len, main, itNum);
+			addMainPendElement(i, len, mainChain, itNum);
 		else
 			addMainPendElement(i, len, pend, itNum);
 
 		if (i % 2 == 1)
 			itNum++;
-	}	
+	}
+	
+	// adds non paired element if size matches
 	if (itNum != numbers.end() && itNum->size() * 2 == len)
 	{
 		if (i % 2 == 1 || i == 0)
-			main.push_back(make_pair(i, *itNum));
+			mainChain.push_back(std::make_pair(i, *itNum));
 		else
-			pend.push_back(make_pair(i, *itNum));
+			pend.push_back(std::make_pair(i, *itNum));
 		itNum++;
 	}
+
+	// create nonParticipating vector
 	if (itNum != numbers.end())
 	{
 		for (;itNum != numbers.end(); itNum++, i++)
@@ -214,49 +209,114 @@ void PmergeMe::makeMainPend()
 			nonParticipating.push_back(*itNum);
 		}
 	}
+
 	for (int i = nonParticipating.size() - 1; i >= 0; i--)
 	{
 		if (nonParticipating[i].empty())
-			nonParticipating.erase(numbers.begin() + i);
+			nonParticipating.erase(nonParticipating.begin() + i);
 	}
+
 	numbers.clear();
-	printAll();
+	printAll(); // TODO remove this line
 }
-/*
-void insertionStepOne()
+
+// copies sorted mainChain and nonParticipating (if not empty) to numbers
+void PmergeMe::pushToNumbers()
 {
-	std::vector<std::pair<int, std::list<int> > >::iterator itMain = main.begin();
-	for (; itMain != main.end(); itMain++)
-	{
+	std::vector<std::pair<int, std::list<int> > >::iterator itMain = mainChain.begin();
+
+	for (; itMain != mainChain.end(); itMain++)
 		numbers.push_back(itMain->second);
-	}
+
 	if (!nonParticipating.empty())
 	{
 		std::vector<std::list<int> >::iterator itNon = nonParticipating.begin();
+
 		for (; itNon != nonParticipating.end(); itNon++)
 			numbers.push_back(*itNon);
 	}
 }
 
+void PmergeMe::sortToMain(std::vector<std::pair< int, std::list<int> > >::iterator itPend)
+{
+    int low = 0;
+    int high = mainChain.size();
+	
+	int whatToCheck = paired;
+	unsigned long n = 2;
+	for (int i = 1; pend[i - 1].first <= itPend->first && i - 1 < (int)pend.size(); i = n - i, n *= 2)
+	{
+		if (pend[i - 1].first == itPend->first)
+		{
+			whatToCheck = prevPend;
+			break;
+		}
+	}
+
+	std::vector<std::pair<int, std::list<int> > >::iterator it = mainChain.begin();
+	for (int i = 0; it != mainChain.end(); it++, i++)
+	{
+		if (it->first + whatToCheck == itPend->first)
+		{
+			high = i;
+			std::cout << green << "pair int val: " << itPend->first << reset << std::endl;
+			std::cout << green << "high: " << high << reset << std::endl;
+		}
+	}
+    while (low < high)
+    {
+        int mid = (low + high) / 2;
+        std::vector<std::pair<int, std::list<int> > >::iterator itMid = mainChain.begin();
+        std::advance(itMid, mid);
+        comparisons++;
+        if (itMid->second.back() < itPend->second.back())
+            low = mid + 1;
+        else
+            high = mid;
+    }
+
+    std::vector<std::pair< int, std::list<int> > >::iterator insertPos = mainChain.begin();
+    std::advance(insertPos, low);
+    mainChain.insert(insertPos, *itPend);
+}
+
+// inserts all members of pend to mainChain in the appropriate order
+void PmergeMe::recursiveInsertion(int n, int j, std::vector<std::pair< int, std::list<int> > >::iterator itPend)
+{
+    int groupSize = n - j;
+    
+    std::vector<std::pair<int, std::list<int> > >::iterator groupEnd = itPend;
+    for (int i = 0; i < groupSize && groupEnd != pend.end(); i++)
+        groupEnd++;
+
+    std::vector<std::pair<int, std::list<int> > >::iterator nextGroup = groupEnd;
+
+    std::vector<std::pair<int, std::list<int> > >::iterator it = groupEnd;
+    while (it != itPend)
+    {
+        --it;
+        sortToMain(it);
+    }
+
+    if (nextGroup != pend.end())
+        recursiveInsertion(n * 2, n, nextGroup);
+}
+
+// all of insertion
 void PmergeMe::insertion()
 {
-	if (pend.empty())
-		insertionStepOne();
-	
-	unsigned long pendMem = pend.size();
-	while 
+	if (!pend.empty())
+		recursiveInsertion(2, 1, pend.begin());
 
-	main.clear();
+	pushToNumbers();
+
+	mainChain.clear();
 	pend.clear();
 	nonParticipating.clear();
 }
-*/
-
-void PmergeMe::insertion()
-{
-}
 
 // OPERATOR OVERLAOD
+
 std::ostream& operator<<(std::ostream &os, PmergeMe &src)
 {
 	int i = 0;

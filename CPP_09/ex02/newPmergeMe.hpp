@@ -15,6 +15,9 @@
 #define yellow "\x1B[33m"
 #define reset "\033[0m"
 
+#define paired 1
+#define prevPend -2
+
 class PmergeMe
 {
 	private:
@@ -25,26 +28,29 @@ class PmergeMe
 		//--------------------------------------------------------
 		// OBJECTS
 
-		// main list
+		// mainChain list
 		std::vector< std::list<int> > numbers;
 
 		// initialization and insertion containers
-		std::vector< std::pair<int, std::list<int> > > main;
-		std::vector< std::pair<int, std::list<int> > > pend;
+		std::vector< std::pair< int, std::list<int> > > mainChain;
+		std::vector< std::pair< int, std::list<int> > > pend;
 		std::vector< std::list<int> > nonParticipating;
 
 		// others
-		std::list<int> leftover;
 		int comparisons;
 	
 		//--------------------------------------------------------
 		// FUNCTIONS
 		void addList(char *nr);
 		void mergeSort();
-		void mainPendGen();
+		void mainChainPendGen();
 		void makeMainPend();
+		void insertionStepOne();
 		void insertion();
 		void printAll(); // TODO remove this
+		void recursiveInsertion(int n, int j, std::vector<std::pair< int, std::list<int> > >::iterator itPend);
+		void sortToMain(std::vector< std::pair< int, std::list<int> > >::iterator itPend);
+		void pushToNumbers();
 	public:
 		//--------------------------------------------------------
 		// CONSTRUCTORS & DESTRUCTOR
