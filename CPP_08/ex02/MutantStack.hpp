@@ -24,8 +24,10 @@ class MutantStack : public std::stack<T>
 		//operator overload
 		MutantStack& operator=(const MutantStack &src);
 
-		// These are aliases for the imbeded iterators hidden in the stack container
-		// It is the only way to access the iterator in stack
+		// These are aliases for the imbeded iterators hidden in the stack container.
+		// Going in container_type is the only way to access the iterators in stack.
+		// Stack is a wrapper for std::daque -> so container_type is daque wich does have the iterator functions
+		// we want to access.
 		typedef typename std::stack<T>::container_type::iterator iterator;
 		typedef typename std::stack<T>::container_type::iterator const_iterator;
 		typedef typename std::stack<T>::container_type::reverse_iterator reverse_iterator;

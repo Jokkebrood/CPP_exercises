@@ -6,6 +6,7 @@ int main()
 	Array<int> b(12);
 	try
 	{
+		std::cout << "This sentence should appear before an error message" << std::endl;
 		int j;
 		j = b[12];
 	}
@@ -15,6 +16,7 @@ int main()
 	}
 	try
 	{
+		std::cout << "This sentence should appear after an error message" << std::endl;
 		int j;
 		j = b[1];
 	}
