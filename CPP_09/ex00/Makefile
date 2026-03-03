@@ -1,7 +1,6 @@
 NAME = CPP09_ex00
 SRC =	main.cpp \
-		BitcoinExchange.cpp \
-		BitcoinExchangeUtils.cpp
+		BitcoinExchange.cpp
 OBJ_DIR = obj
 OBJ = $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 CC = c++

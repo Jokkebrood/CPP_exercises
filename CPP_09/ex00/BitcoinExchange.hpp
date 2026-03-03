@@ -72,15 +72,4 @@ std::string itos(T i)
     return ss.str();
 }
 
-bool isNumberRange(const std::string& s, std::size_t x, std::size_t y);
-bool isDateSyntaxValid(std::string dataLine);
-Date dataLineToDate(std::string dataLine);
-bool isDateReal(std::string dataLine);
-int isDateValid(std::string dataLine);
-Date currentDate();
-void incrementDate(Date &date);
-std::string itosDate(Date date);
-int dateDiff(Date date, std::string dateToMatch);
-bool isValidDouble(const std::string& str);
-
 #endif
