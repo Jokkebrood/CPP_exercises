@@ -8,6 +8,7 @@
 #include <stdexcept> // throwing errors
 #include <cstdlib> //
 #include <algorithm> // rotate()
+#include <math.h> // log2()
 
 #define red "\x1B[31m"
 #define blue "\x1B[34m"
@@ -48,7 +49,7 @@ class PmergeMe
 		void insertionStepOne();
 		void insertion();
 		void printAll(); // TODO remove this
-		void recursiveInsertion(int n, int j, std::vector<std::pair< int, std::list<int> > >::iterator itPend);
+		void recursiveInsertion(int n, std::vector<std::pair< int, std::list<int> > >::iterator itPend);
 		void sortToMain(std::vector< std::pair< int, std::list<int> > >::iterator itPend);
 		void pushToNumbers();
 	public:

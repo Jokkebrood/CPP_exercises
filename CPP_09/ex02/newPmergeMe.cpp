@@ -8,7 +8,7 @@ PmergeMe::PmergeMe(PmergeMe &src)
 }
 
 // Checks the largest power of 2 that fits inside size
-// e.g. for 61 it would be 32, for 64 it would be 64, for 100 ti would be 64, etc.
+// e.g. for 61 it would be 32, for 64 it would be 64, for 100 it would be 64, etc.
 unsigned long power2fit(unsigned long size)
 {
 	unsigned long i = 1;
@@ -26,6 +26,15 @@ PmergeMe::PmergeMe(int ac, char **input) : comparisons(0)
 
 	for (int i = 1; input[i]; i++)
 		addList(input[i]);
+
+	std::cout << red << "unsorted list:" << std::endl;	
+	std::vector<std::list<int> >::iterator it = numbers.begin();
+	for (; it != numbers.end(); it++)
+	{
+		for (std::list<int>::iterator listIt = it->begin(); listIt != it->end(); listIt++)
+			std::cout << *listIt << " ";
+	}
+	std::cout << reset << std::endl;
 
 	unsigned long maxSize = power2fit(numbers.size());
 	while (numbers.begin()->size() != maxSize)
@@ -119,7 +128,7 @@ void PmergeMe::addList(char *nr)
 //**********************************************************************************************
 void PmergeMe::printAll()
 {
-    std::cout << "mainChain: ";
+    std::cout << green << "mainChain: ";
     for (std::vector< std::pair<int, std::list<int> > >::iterator it = mainChain.begin(); it != mainChain.end(); it++)
     {
         std::cout << "(" << it->first << ") ";
@@ -129,7 +138,7 @@ void PmergeMe::printAll()
     }
     std::cout << std::endl;
 
-    std::cout << "pend: ";
+    std::cout << yellow << "pend: ";
     for (std::vector< std::pair<int, std::list<int> > >::iterator it = pend.begin(); it != pend.end(); it++)
     {
         std::cout << "(" << it->first << ") ";
@@ -139,7 +148,7 @@ void PmergeMe::printAll()
     }
     std::cout << std::endl;
 
-    std::cout << "nonParticipating: ";
+    std::cout << red << "nonParticipating: ";
     for (std::vector< std::list<int> >::iterator it = nonParticipating.begin(); it != nonParticipating.end(); it++)
     {
         for (std::list<int>::iterator listIt = it->begin(); listIt != it->end(); listIt++)
@@ -147,7 +156,7 @@ void PmergeMe::printAll()
         std::cout << "| ";
     }
     std::cout << std::endl;
-    std::cout << "------------------------------------------------" << std::endl;
+    std::cout << reset << "──────────────────────────────────────────────────────────────" << std::endl;
 }
 //**********************************************************************************************
 
@@ -217,7 +226,7 @@ void PmergeMe::makeMainPend()
 	}
 
 	numbers.clear();
-	printAll(); // TODO remove this line
+//	printAll(); // TODO remove this line
 }
 
 // copies sorted mainChain and nonParticipating (if not empty) to numbers
@@ -242,26 +251,11 @@ void PmergeMe::sortToMain(std::vector<std::pair< int, std::list<int> > >::iterat
     int low = 0;
     int high = mainChain.size();
 	
-	int whatToCheck = paired;
-	unsigned long n = 2;
-	for (int i = 1; pend[i - 1].first <= itPend->first && i - 1 < (int)pend.size(); i = n - i, n *= 2)
-	{
-		if (pend[i - 1].first == itPend->first)
-		{
-			whatToCheck = prevPend;
-			break;
-		}
-	}
-
 	std::vector<std::pair<int, std::list<int> > >::iterator it = mainChain.begin();
 	for (int i = 0; it != mainChain.end(); it++, i++)
 	{
-		if (it->first + whatToCheck == itPend->first)
-		{
-			high = i;
-			std::cout << green << "pair int val: " << itPend->first << reset << std::endl;
-			std::cout << green << "high: " << high << reset << std::endl;
-		}
+		if (it->first + 1 == itPend->first)
+			high = i + 1;
 	}
     while (low < high)
     {
@@ -280,10 +274,19 @@ void PmergeMe::sortToMain(std::vector<std::pair< int, std::list<int> > >::iterat
     mainChain.insert(insertPos, *itPend);
 }
 
-// inserts all members of pend to mainChain in the appropriate order
-void PmergeMe::recursiveInsertion(int n, int j, std::vector<std::pair< int, std::list<int> > >::iterator itPend)
+int jacobthal(int n)
 {
-    int groupSize = n - j;
+	if (n == 0)
+		return 0;
+	if (n == 1)
+		return 1;
+	return jacobthal(n - 1) + 2 * jacobthal(n - 2);
+}
+
+// inserts all members of pend to mainChain in the appropriate order
+void PmergeMe::recursiveInsertion(int n, std::vector<std::pair< int, std::list<int> > >::iterator itPend)
+{
+    int groupSize = jacobthal(n) - jacobthal(n - 1);
     
     std::vector<std::pair<int, std::list<int> > >::iterator groupEnd = itPend;
     for (int i = 0; i < groupSize && groupEnd != pend.end(); i++)
@@ -297,16 +300,15 @@ void PmergeMe::recursiveInsertion(int n, int j, std::vector<std::pair< int, std:
         --it;
         sortToMain(it);
     }
-
     if (nextGroup != pend.end())
-        recursiveInsertion(n * 2, n, nextGroup);
+        recursiveInsertion(n + 1, nextGroup);
 }
 
 // all of insertion
 void PmergeMe::insertion()
 {
 	if (!pend.empty())
-		recursiveInsertion(2, 1, pend.begin());
+		recursiveInsertion(2, pend.begin());
 
 	pushToNumbers();
 
@@ -317,28 +319,43 @@ void PmergeMe::insertion()
 
 // OPERATOR OVERLAOD
 
+int maxComparisons(int n)
+{
+    int i[56] = {0, 1, 3, 5, 7, 10, 13, 16, 19, 22, 26, 30, 34,
+				38, 42, 46, 50, 54, 58, 62, 66, 71, 76, 81, 86,
+				91, 96, 101, 106, 111, 116, 121, 126, 131, 136,
+				141, 146, 151, 156, 161, 166, 171, 177, 183, 189,
+				195, 201, 207, 213, 219, 225, 231, 237, 243, 249, 255};
+	if (i[n - 1])
+		return i[n - 1];
+	else 
+		return 0;
+}
+
 std::ostream& operator<<(std::ostream &os, PmergeMe &src)
 {
-	int i = 0;
 	int j = 0;
+	std::cout << green << "sorted list:";
 	std::vector< std::list<int> >::const_iterator it = src.getNumbers().begin();
-	for (; it != src.getNumbers().end(); it++)
+	for (int i = 0; it != src.getNumbers().end(); it++, i++, j++)
 	{
-		j++;
-		if (it->empty())
-			i++;
-		else
+		if (i % 10 == 0)
+			std::cout << std::endl;
+		std::list<int>::const_iterator it2 = it->begin();
+		for (; it2 != it->end(); it2++)
 		{
-			std::list<int>::const_iterator it2 = it->begin();
-			for (; it2 != it->end(); it2++)
-			{
-				os << *it2 << " ";
-			}
+			if (*it2 < 10)
+				std::cout << " ";
+			os << *it2 << " ";
 		}
-		std::cout << "|";
 	}
-	os << std::endl << "comparisons: " << src.getComparisons() << std::endl;
-	os << "empty lists: " << i << std::endl;
-	os << "lists: " << j << std::endl;
+	
+	std::cout << reset << "──────────────────────────────────────────────────────────────" << std::endl;
+	os << std::endl << "my comparisons:  " << src.getComparisons() << std::endl;
+	if (&maxComparisons == 0)
+		os << "max comparisons: number too large" << std::endl;
+	else
+		os << "max comparisons: " << maxComparisons(j) << std::endl;;
+	os << "number of input: " << j << std::endl;
 	return os;
 }
