@@ -1,8 +1,10 @@
 #include "PmergeMe.hpp"
 
 // CONSTRUCTORS & DESTRUCTORS
-PmergeMe::PmergeMe() {}
-PmergeMe::PmergeMe(PmergeMe &src)
+template <typename Container>
+PmergeMe<Container>::PmergeMe() {}
+template <typename Container>
+PmergeMe<Container>::PmergeMe(PmergeMe<Container> &src)
 {
 	*this = src;
 }
@@ -19,7 +21,8 @@ unsigned long power2fit(unsigned long size)
 	return i;
 }
 
-PmergeMe::PmergeMe(int ac, char **input) : comparisons(0)
+template <typename Container>
+PmergeMe<Container>::PmergeMe(int ac, char **input) : comparisons(0)
 {
 	if (ac < 3)
 		throw std::runtime_error("Expects at least two strings of input");
@@ -27,13 +30,7 @@ PmergeMe::PmergeMe(int ac, char **input) : comparisons(0)
 	for (int i = 1; input[i]; i++)
 		addList(input[i]);
 
-	std::cout << red << "unsorted list:" << std::endl;	
-	std::vector<std::list<int> >::iterator it = numbers.begin();
-	for (; it != numbers.end(); it++)
-	{
-		for (std::list<int>::iterator listIt = it->begin(); listIt != it->end(); listIt++)
-			std::cout << *listIt << " ";
-	}
+	unsortedList = numbers;
 	std::cout << reset << std::endl;
 
 	unsigned long maxSize = power2fit(numbers.size());
@@ -47,16 +44,25 @@ PmergeMe::PmergeMe(int ac, char **input) : comparisons(0)
 	}
 }
 
-PmergeMe::~PmergeMe() {}
+template <typename Container>
+PmergeMe<Container>::~PmergeMe() {}
 
 // GETTERS
 
-const std::vector< std::list<int> > &PmergeMe::getNumbers() const
+template <typename Container>
+const std::vector< Container > &PmergeMe<Container>::getUnsortedList() const
+{
+	return unsortedList;
+}
+
+template <typename Container>
+const std::vector< Container > &PmergeMe<Container>::getNumbers() const
 {
 	return numbers;
 }
 
-const int &PmergeMe::getComparisons() const
+template <typename Container>
+const int &PmergeMe<Container>::getComparisons() const
 {
 	return comparisons;
 }
@@ -64,10 +70,11 @@ const int &PmergeMe::getComparisons() const
 // FUNCTIONS
 
 // Merge sorts
-void PmergeMe::mergeSort()
+template <typename Container>
+void PmergeMe<Container>::mergeSort()
 {
-	std::vector< std::list<int> >::iterator it = numbers.begin();
-	std::vector< std::list<int> >::iterator itNext = numbers.begin();
+	typename std::vector<Container>::iterator it = numbers.begin();
+	typename std::vector<Container>::iterator itNext = numbers.begin();
 	itNext++;
 
 	for (; itNext != numbers.end(); itNext++, it++)
@@ -79,11 +86,15 @@ void PmergeMe::mergeSort()
 			comparisons++;
 			if (it->back() > itNext->back())
 			{
-				itNext->splice(itNext->end(), *it);
+				itNext->insert(itNext->end(), it->begin(), it->end());
+				it->clear();
 				std::rotate(it, itNext, itNext + 1);
 			}
 			else
-				it->splice(it->end(), *itNext);
+			{
+				it->insert(it->end(), itNext->begin(), itNext->end());
+				itNext->clear();
+			}
 		}
 	}
 
@@ -116,9 +127,10 @@ int errorManagement(char *nr)
 	return i;
 }
 
-void PmergeMe::addList(char *nr)
+template <typename Container>
+void PmergeMe<Container>::addList(char *nr)
 {
-	std::list<int> list;
+	Container list;
 
 	list.push_back(errorManagement(nr));
 
@@ -126,64 +138,69 @@ void PmergeMe::addList(char *nr)
 }
 
 //**********************************************************************************************
-void PmergeMe::printAll()
+
+template <typename Container>
+void PmergeMe<Container>::printAll()
 {
     std::cout << green << "mainChain: ";
-    for (std::vector< std::pair<int, std::list<int> > >::iterator it = mainChain.begin(); it != mainChain.end(); it++)
+    for (typename std::vector<std::pair<int, Container> >::iterator it = mainChain.begin(); it != mainChain.end(); it++)
     {
         std::cout << "(" << it->first << ") ";
-        for (std::list<int>::iterator listIt = it->second.begin(); listIt != it->second.end(); listIt++)
+        for (typename Container::iterator listIt = it->second.begin(); listIt != it->second.end(); listIt++)
             std::cout << *listIt << " ";
         std::cout << "| ";
     }
     std::cout << std::endl;
 
     std::cout << yellow << "pend: ";
-    for (std::vector< std::pair<int, std::list<int> > >::iterator it = pend.begin(); it != pend.end(); it++)
+    for (typename std::vector<std::pair<int, Container> >::iterator it = pend.begin(); it != pend.end(); it++)
     {
         std::cout << "(" << it->first << ") ";
-        for (std::list<int>::iterator listIt = it->second.begin(); listIt != it->second.end(); listIt++)
+        for (typename Container::iterator listIt = it->second.begin(); listIt != it->second.end(); listIt++)
             std::cout << *listIt << " ";
         std::cout << "| ";
     }
     std::cout << std::endl;
 
     std::cout << red << "nonParticipating: ";
-    for (std::vector< std::list<int> >::iterator it = nonParticipating.begin(); it != nonParticipating.end(); it++)
+    for (typename std::vector<Container>::iterator it = nonParticipating.begin(); it != nonParticipating.end(); it++)
     {
-        for (std::list<int>::iterator listIt = it->begin(); listIt != it->end(); listIt++)
+        for (typename Container::iterator listIt = it->begin(); listIt != it->end(); listIt++)
             std::cout << *listIt << " ";
         std::cout << "| ";
     }
     std::cout << std::endl;
     std::cout << reset << "──────────────────────────────────────────────────────────────" << std::endl;
 }
+
 //**********************************************************************************************
 
 // Adds a single element to either the mainChain or pend vector.
+template <typename Container>
 void addMainPendElement(int i, int len,
-	std::vector< std::pair<int, std::list<int> > > &maPe,
-	std::vector< std::list<int> >::iterator &itNum)
+	std::vector< std::pair<int, Container > > &maPe,
+	typename std::vector<Container>::iterator &itNum)
 {
-	std::list<int>::iterator it = itNum->begin();
+	typename Container::iterator it = itNum->begin();
 	std::advance(it, (len / 2));
 
 	if (i % 2 == 0)
 	{
-		std::list<int> firstHalf(itNum->begin(), it);
+		Container firstHalf(itNum->begin(), it);
 		maPe.push_back(std::make_pair(i, firstHalf));
 	}
 	else
 	{
-		std::list<int> secondHalf(it, itNum->end());
+		Container secondHalf(it, itNum->end());
 		maPe.push_back(std::make_pair(i, secondHalf));
 	}
 }
 
 // Creates the mainChain and pend vectors
-void PmergeMe::makeMainPend()
+template <typename Container>
+void PmergeMe<Container>::makeMainPend()
 {
-	std::vector< std::list<int> >::iterator itNum = numbers.begin();
+	typename std::vector<Container>::iterator itNum = numbers.begin();
 
 	unsigned long len = itNum->size();
 	int i = 0;
@@ -230,28 +247,30 @@ void PmergeMe::makeMainPend()
 }
 
 // copies sorted mainChain and nonParticipating (if not empty) to numbers
-void PmergeMe::pushToNumbers()
+template <typename Container>
+void PmergeMe<Container>::pushToNumbers()
 {
-	std::vector<std::pair<int, std::list<int> > >::iterator itMain = mainChain.begin();
+	typename std::vector<std::pair<int, Container> >::iterator itMain = mainChain.begin();
 
 	for (; itMain != mainChain.end(); itMain++)
 		numbers.push_back(itMain->second);
 
 	if (!nonParticipating.empty())
 	{
-		std::vector<std::list<int> >::iterator itNon = nonParticipating.begin();
+		typename std::vector<Container>::iterator itNon = nonParticipating.begin();
 
 		for (; itNon != nonParticipating.end(); itNon++)
 			numbers.push_back(*itNon);
 	}
 }
 
-void PmergeMe::sortToMain(std::vector<std::pair< int, std::list<int> > >::iterator itPend)
+template <typename Container>
+void PmergeMe<Container>::sortToMain(typename std::vector<std::pair<int, Container> >::iterator itPend)
 {
     int low = 0;
     int high = mainChain.size();
 	
-	std::vector<std::pair<int, std::list<int> > >::iterator it = mainChain.begin();
+	typename std::vector<std::pair<int, Container> >::iterator it = mainChain.begin();
 	for (int i = 0; it != mainChain.end(); it++, i++)
 	{
 		if (it->first + 1 == itPend->first)
@@ -260,7 +279,7 @@ void PmergeMe::sortToMain(std::vector<std::pair< int, std::list<int> > >::iterat
     while (low < high)
     {
         int mid = (low + high) / 2;
-        std::vector<std::pair<int, std::list<int> > >::iterator itMid = mainChain.begin();
+        typename std::vector<std::pair<int, Container> >::iterator itMid = mainChain.begin();
         std::advance(itMid, mid);
         comparisons++;
         if (itMid->second.back() < itPend->second.back())
@@ -269,7 +288,7 @@ void PmergeMe::sortToMain(std::vector<std::pair< int, std::list<int> > >::iterat
             high = mid;
     }
 
-    std::vector<std::pair< int, std::list<int> > >::iterator insertPos = mainChain.begin();
+    typename std::vector<std::pair<int, Container> >::iterator insertPos = mainChain.begin();
     std::advance(insertPos, low);
     mainChain.insert(insertPos, *itPend);
 }
@@ -284,17 +303,18 @@ int jacobthal(int n)
 }
 
 // inserts all members of pend to mainChain in the appropriate order
-void PmergeMe::recursiveInsertion(int n, std::vector<std::pair< int, std::list<int> > >::iterator itPend)
+template <typename Container>
+void PmergeMe<Container>::recursiveInsertion(int n, typename std::vector<std::pair<int, Container> >::iterator itPend)
 {
     int groupSize = jacobthal(n) - jacobthal(n - 1);
     
-    std::vector<std::pair<int, std::list<int> > >::iterator groupEnd = itPend;
+    typename std::vector<std::pair<int, Container> >::iterator groupEnd = itPend;
     for (int i = 0; i < groupSize && groupEnd != pend.end(); i++)
         groupEnd++;
 
-    std::vector<std::pair<int, std::list<int> > >::iterator nextGroup = groupEnd;
+    typename std::vector<std::pair<int, Container> >::iterator nextGroup = groupEnd;
 
-    std::vector<std::pair<int, std::list<int> > >::iterator it = groupEnd;
+    typename std::vector<std::pair<int, Container> >::iterator it = groupEnd;
     while (it != itPend)
     {
         --it;
@@ -305,7 +325,8 @@ void PmergeMe::recursiveInsertion(int n, std::vector<std::pair< int, std::list<i
 }
 
 // all of insertion
-void PmergeMe::insertion()
+template <typename Container>
+void PmergeMe<Container>::insertion()
 {
 	if (!pend.empty())
 		recursiveInsertion(2, pend.begin());
@@ -319,29 +340,24 @@ void PmergeMe::insertion()
 
 // OPERATOR OVERLAOD
 
-int maxComparisons(int n)
-{
-    int i[56] = {0, 1, 3, 5, 7, 10, 13, 16, 19, 22, 26, 30, 34,
-				38, 42, 46, 50, 54, 58, 62, 66, 71, 76, 81, 86,
-				91, 96, 101, 106, 111, 116, 121, 126, 131, 136,
-				141, 146, 151, 156, 161, 166, 171, 177, 183, 189,
-				195, 201, 207, 213, 219, 225, 231, 237, 243, 249, 255};
-	if (i[n - 1])
-		return i[n - 1];
-	else 
-		return 0;
-}
-
-std::ostream& operator<<(std::ostream &os, PmergeMe &src)
+template <typename Container>
+std::ostream& operator<<(std::ostream &os, PmergeMe<Container> &src)
 {
 	int j = 0;
-	std::cout << green << "sorted list:";
-	std::vector< std::list<int> >::const_iterator it = src.getNumbers().begin();
+	std::cout << red << "unsorted list:" << std::endl;	
+	typename std::vector<Container>::const_iterator itUn = src.getUnsortedList().begin();
+	for (; itUn != src.getUnsortedList().end(); itUn++)
+	{
+		for (typename Container::const_iterator listIt = itUn->begin(); listIt != itUn->end(); listIt++)
+			std::cout << *listIt << " ";
+	}
+	std::cout << std::endl << green << "sorted list:";
+	typename std::vector<Container>::const_iterator it = src.getNumbers().begin();
 	for (int i = 0; it != src.getNumbers().end(); it++, i++, j++)
 	{
 		if (i % 10 == 0)
 			std::cout << std::endl;
-		std::list<int>::const_iterator it2 = it->begin();
+		typename Container::const_iterator it2 = it->begin();
 		for (; it2 != it->end(); it2++)
 		{
 			if (*it2 < 10)
@@ -349,13 +365,26 @@ std::ostream& operator<<(std::ostream &os, PmergeMe &src)
 			os << *it2 << " ";
 		}
 	}	
-	std::cout << std::endl 
-	<< reset << "──────────────────────────────────────────────────────────────" << std::endl;
-	os << std::endl << "my comparisons:  " << src.getComparisons() << std::endl;
-	if (&maxComparisons == 0)
-		os << "max comparisons: number too large" << std::endl;
-	else
-		os << "max comparisons: " << maxComparisons(j) << std::endl;;
-	os << "number of input: " << j << std::endl;
 	return os;
 }
+
+template <typename Container>
+PmergeMe<Container>& PmergeMe<Container>::operator=(PmergeMe<Container> &src)
+{
+	if (this != &src)
+	{
+		numbers = src.numbers;
+		mainChain = src.mainChain;
+		pend = src.pend;
+		nonParticipating = src.nonParticipating;
+		comparisons = src.comparisons;
+	}
+	return *this;
+}
+
+// EXPLICIT TEMPLATE INSTANTIATION
+
+template class PmergeMe<std::list<int> >;
+template class PmergeMe<std::deque<int> >;
+template std::ostream& operator<<<std::list<int> >(std::ostream&, PmergeMe<std::list<int> >&);
+template std::ostream& operator<<<std::deque<int> >(std::ostream&, PmergeMe<std::deque<int> >&);

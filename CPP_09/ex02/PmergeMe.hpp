@@ -9,6 +9,7 @@
 #include <cstdlib> //
 #include <algorithm> // rotate()
 #include <math.h> // log2()
+#include <deque>
 
 #define red "\x1B[31m"
 #define blue "\x1B[34m"
@@ -19,6 +20,7 @@
 #define paired 1
 #define prevPend -2
 
+template <typename Container>
 class PmergeMe
 {
 	private:
@@ -30,12 +32,14 @@ class PmergeMe
 		// OBJECTS
 
 		// mainChain list
-		std::vector< std::list<int> > numbers;
+		std::vector< Container > numbers;
+		
+		std::vector< Container > unsortedList;
 
 		// initialization and insertion containers
-		std::vector< std::pair< int, std::list<int> > > mainChain;
-		std::vector< std::pair< int, std::list<int> > > pend;
-		std::vector< std::list<int> > nonParticipating;
+		std::vector< std::pair< int, Container > > mainChain;
+		std::vector< std::pair< int, Container > > pend;
+		std::vector< Container > nonParticipating;
 
 		// others
 		int comparisons;
@@ -49,8 +53,8 @@ class PmergeMe
 		void insertionStepOne();
 		void insertion();
 		void printAll(); // TODO remove this
-		void recursiveInsertion(int n, std::vector<std::pair< int, std::list<int> > >::iterator itPend);
-		void sortToMain(std::vector< std::pair< int, std::list<int> > >::iterator itPend);
+		void recursiveInsertion(int n, typename std::vector<std::pair< int, Container > >::iterator itPend);
+		void sortToMain(typename std::vector< std::pair< int, Container > >::iterator itPend);
 		void pushToNumbers();
 	public:
 		//--------------------------------------------------------
@@ -61,14 +65,16 @@ class PmergeMe
 
 		//--------------------------------------------------------
 		// OPERATOR OVERLOAD
-//		PmergeMe operator=(PmergeMe &src); // TODO add function to cpp file
+		PmergeMe& operator=(PmergeMe &src); // TODO add function to cpp file
 
 		//--------------------------------------------------------
 		// GETTERS
-		const std::vector< std::list<int> > &getNumbers() const;
+		const std::vector< Container > &getUnsortedList() const;
+		const std::vector< Container > &getNumbers() const;
 		const int &getComparisons() const;
 };
 
-std::ostream& operator<<(std::ostream &os, PmergeMe &src);
+template <typename Container>
+std::ostream& operator<<(std::ostream &os, PmergeMe<Container> &src);
 
 #endif
