@@ -1,6 +1,6 @@
 NAME = PmergeMe
 SRC =	main.cpp \
-		newPmergeMe.cpp
+		PmergeMe.cpp
 OBJ_DIR = obj
 OBJ = $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 CC = c++
